@@ -1,0 +1,33 @@
+name: Afrika Crawler - Veracode Updates
+
+on:
+  schedule:
+    # Roda todos os dias às 9h UTC (6h BRT)
+    - cron: '0 9 * * *'
+  workflow_dispatch: # Permite execução manual
+
+jobs:
+  crawl:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Run crawler
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+        run: bun run src/index.ts
+
+      - name: Generate summary
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+        run: bun run scripts/generate-summary.ts
