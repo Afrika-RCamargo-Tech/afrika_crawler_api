@@ -1,0 +1,16 @@
+node_modules
+dist
+.env
+.DS_Store
+
+# Bun
+bun.lockb
+.bun
+
+# Playwright
+.playwright-mcp
+*.png
+*.jpeg
+
+# Logs
+*.log
