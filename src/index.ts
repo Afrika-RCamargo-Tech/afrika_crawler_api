@@ -1,6 +1,7 @@
 import { connectToDatabase, disconnectDatabase } from './database';
 import { VeracodeFetcher } from './strategies/VeracodeFetcher';
 import { VeracodeRssFetcher } from './strategies/VeracodeRssFetcher';
+import { SdElementsFetcher } from './strategies/SdElementsFetcher';
 import { UpdateModel } from './models/Update';
 import { createHash } from 'crypto';
 
@@ -12,8 +13,7 @@ const useRss = process.env.USE_RSS === 'true';
 // Lista de estratégias ativas
 const strategies = [
   useRss ? new VeracodeRssFetcher() : new VeracodeFetcher(),
-  // new SaltFetcher(), 
-  // new SdElementsFetcher()
+  new SdElementsFetcher(),
 ];
 
 console.log(`📡 Modo: ${useRss ? 'RSS Híbrido (recomendado)' : 'Crawler Original'}\n`);
