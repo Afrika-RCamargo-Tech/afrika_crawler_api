@@ -119,6 +119,7 @@ async function run() {
       console.log(`│   ├── [${numberStr}] ${statusIcon} ${updateDate} - ${truncated}`);
       if (update.link) {
         console.log(`│   │       🔗 ${update.link}`);
+      }
     }
 
     console.log('│');
