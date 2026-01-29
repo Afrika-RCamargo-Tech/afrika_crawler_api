@@ -54,12 +54,17 @@ export class VeracodeFetcher implements IUpdateFetcher {
         const dateText = $(dateElement).text().trim();
         
         // Verificar se é um heading de data (formato: "January 20, 2026")
-        const dateMatch = dateText.match(/^([A-Z][a-z]+\s+\d{1,2},\s+\d{4})/);
-        if (!dateMatch || !dateMatch[1]) return;
+        const dateMatch = dateText.match(/^([A-Z][a-z]+)\s+(\d{1,2}),\s+(\d{4})/);
+        if (!dateMatch) return;
 
-        // Parsear a data mantendo o timezone local (meio-dia para evitar problemas de timezone)
-        const parsedDate = new Date(dateMatch[1] + ' 12:00:00 GMT-0000');
-        const date = new Date(parsedDate.getUTCFullYear(), parsedDate.getUTCMonth(), parsedDate.getUTCDate());
+        const [, month, day, year] = dateMatch;
+        const monthMap: { [key: string]: number } = {
+          'January': 0, 'February': 1, 'March': 2, 'April': 3, 'May': 4, 'June': 5,
+          'July': 6, 'August': 7, 'September': 8, 'October': 9, 'November': 10, 'December': 11
+        };
+        
+        // Criar data em UTC para garantir consistência independente do timezone
+        const date = new Date(Date.UTC(parseInt(year), monthMap[month], parseInt(day)));
         
         // Pegar todos os headings h3 que vêm depois dessa data até o próximo h2
         let currentElement = $(dateElement).next();
