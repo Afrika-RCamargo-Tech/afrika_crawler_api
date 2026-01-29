@@ -898,6 +898,239 @@
                 display: none;
             }
         }
+
+        /* API Docs Section */
+        .api-docs {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .api-docs-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .api-docs-header h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .api-docs-header .api-badge {
+            background: var(--accent-light);
+            color: var(--accent);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .api-endpoint {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .api-endpoint:last-child {
+            margin-bottom: 0;
+        }
+
+        .api-endpoint-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .api-endpoint-header:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .api-method {
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+        }
+
+        .api-method.get {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .api-method.post {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .api-path {
+            font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+            font-size: 0.875rem;
+            color: var(--text-primary);
+        }
+
+        .api-desc {
+            color: var(--text-secondary);
+            font-size: 0.8125rem;
+            margin-left: auto;
+        }
+
+        .api-endpoint-body {
+            display: none;
+            padding: 1rem;
+            border-top: 1px solid var(--border-color);
+            background: var(--bg-primary);
+        }
+
+        .api-endpoint.open .api-endpoint-body {
+            display: block;
+        }
+
+        .api-endpoint.open .api-endpoint-header {
+            background: var(--bg-tertiary);
+        }
+
+        .api-section-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .api-params {
+            margin-bottom: 1rem;
+        }
+
+        .api-param {
+            display: flex;
+            gap: 0.75rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .api-param:last-child {
+            border-bottom: none;
+        }
+
+        .api-param-name {
+            font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+            font-size: 0.8125rem;
+            color: var(--accent);
+            min-width: 80px;
+        }
+
+        .api-param-type {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            background: var(--bg-tertiary);
+            padding: 0.125rem 0.5rem;
+            border-radius: 4px;
+        }
+
+        .api-param-desc {
+            font-size: 0.8125rem;
+            color: var(--text-secondary);
+        }
+
+        .api-code-block {
+            background: #1e293b;
+            border-radius: 8px;
+            padding: 1rem;
+            overflow-x: auto;
+            margin-top: 0.5rem;
+        }
+
+        .api-code-block code {
+            font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+            font-size: 0.8125rem;
+            color: #e2e8f0;
+            white-space: pre;
+        }
+
+        .api-code-block .comment {
+            color: #64748b;
+        }
+
+        .api-code-block .string {
+            color: #a5d6ff;
+        }
+
+        .api-code-block .key {
+            color: #7dd3fc;
+        }
+
+        .api-try-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 1rem;
+        }
+
+        .api-try-btn:hover {
+            background: var(--accent-hover);
+        }
+
+        .api-base-url {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: var(--bg-secondary);
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .api-base-url span {
+            font-size: 0.8125rem;
+            color: var(--text-secondary);
+        }
+
+        .api-base-url code {
+            font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+            font-size: 0.875rem;
+            color: var(--text-primary);
+        }
+
+        .api-copy-btn {
+            margin-left: auto;
+            padding: 0.375rem 0.75rem;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.375rem;
+            transition: all 0.2s;
+        }
+
+        .api-copy-btn:hover {
+            background: var(--bg-tertiary);
+            border-color: var(--border-hover);
+        }
     </style>
 </head>
 <body>
@@ -1092,6 +1325,90 @@
             <div class="pagination-info" id="paginationInfo"></div>
             <div class="pagination" id="pagination"></div>
         </div>
+
+        <!-- API Documentation -->
+        <section class="api-docs" id="apiDocs">
+            <div class="api-docs-header">
+                <i data-lucide="code-2" style="width: 24px; height: 24px; color: var(--accent);"></i>
+                <h2>API Documentation</h2>
+                <span class="api-badge">REST API</span>
+            </div>
+
+            <div class="api-base-url">
+                <i data-lucide="globe" style="width: 16px; height: 16px; color: var(--text-muted);"></i>
+                <span>Base URL:</span>
+                <code id="apiBaseUrl">https://afrikacrawlerapi.vercel.app/api</code>
+                <button class="api-copy-btn" onclick="copyApiUrl()">
+                    <i data-lucide="copy" style="width: 14px; height: 14px;"></i>
+                    Copiar
+                </button>
+            </div>
+
+            <!-- GET /updates -->
+            <div class="api-endpoint" id="endpoint-updates">
+                <div class="api-endpoint-header" onclick="toggleEndpoint('endpoint-updates')">
+                    <span class="api-method get">GET</span>
+                    <span class="api-path">/updates</span>
+                    <span class="api-desc">Lista todos os updates das ferramentas</span>
+                    <i data-lucide="chevron-down" style="width: 18px; height: 18px; color: var(--text-muted); margin-left: auto;"></i>
+                </div>
+                <div class="api-endpoint-body">
+                    <div class="api-params">
+                        <div class="api-section-title">Query Parameters</div>
+                        <div class="api-param">
+                            <span class="api-param-name">tool</span>
+                            <span class="api-param-type">string</span>
+                            <span class="api-param-desc">Filtrar por ferramenta (ex: Veracode)</span>
+                        </div>
+                        <div class="api-param">
+                            <span class="api-param-name">limit</span>
+                            <span class="api-param-type">number</span>
+                            <span class="api-param-desc">Limite de resultados (padrão: 20)</span>
+                        </div>
+                    </div>
+
+                    <div class="api-section-title">Exemplo de Resposta</div>
+                    <div class="api-code-block">
+<code>[{
+  <span class="key">"tool"</span>: <span class="string">"Veracode"</span>,
+  <span class="key">"version"</span>: <span class="string">"CLI updates - Veracode CLI v3.5.0"</span>,
+  <span class="key">"date"</span>: <span class="string">"2026-01-28T12:00:00.000Z"</span>,
+  <span class="key">"description"</span>: <span class="string">"New features and improvements..."</span>,
+  <span class="key">"link"</span>: <span class="string">"https://docs.veracode.com/updates/..."</span>
+}]</code>
+                    </div>
+
+                    <button class="api-try-btn" onclick="tryApiEndpoint('/updates?limit=5')">
+                        <i data-lucide="play" style="width: 14px; height: 14px;"></i>
+                        Testar no navegador
+                    </button>
+                </div>
+            </div>
+
+            <!-- GET / -->
+            <div class="api-endpoint" id="endpoint-health">
+                <div class="api-endpoint-header" onclick="toggleEndpoint('endpoint-health')">
+                    <span class="api-method get">GET</span>
+                    <span class="api-path">/</span>
+                    <span class="api-desc">Health check da API</span>
+                    <i data-lucide="chevron-down" style="width: 18px; height: 18px; color: var(--text-muted); margin-left: auto;"></i>
+                </div>
+                <div class="api-endpoint-body">
+                    <div class="api-section-title">Exemplo de Resposta</div>
+                    <div class="api-code-block">
+<code>{
+  <span class="key">"status"</span>: <span class="string">"ok"</span>,
+  <span class="key">"message"</span>: <span class="string">"Afrika Crawler API is running 🚀"</span>
+}</code>
+                    </div>
+
+                    <button class="api-try-btn" onclick="tryApiEndpoint('/')">
+                        <i data-lucide="play" style="width: 14px; height: 14px;"></i>
+                        Testar no navegador
+                    </button>
+                </div>
+            </div>
+        </section>
     </div>
 
     <!-- Loading Overlay -->
@@ -1741,6 +2058,31 @@
 
         function hideError() {
             document.getElementById('errorBanner').classList.remove('visible');
+        }
+
+        // API Documentation Functions
+        function toggleEndpoint(id) {
+            const endpoint = document.getElementById(id);
+            endpoint.classList.toggle('open');
+            lucide.createIcons();
+        }
+
+        function copyApiUrl() {
+            const url = document.getElementById('apiBaseUrl').textContent;
+            navigator.clipboard.writeText(url).then(() => {
+                const btn = document.querySelector('.api-copy-btn');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i data-lucide="check" style="width: 14px; height: 14px;"></i> Copiado!';
+                lucide.createIcons();
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    lucide.createIcons();
+                }, 2000);
+            });
+        }
+
+        function tryApiEndpoint(path) {
+            window.open(API_URL + path, '_blank');
         }
     </script>
 </body>
