@@ -11,23 +11,32 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name: Checkout code
+      - name: 📥 Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Bun
+      - name: 🔧 Setup Bun
         uses: oven-sh/setup-bun@v1
         with:
           bun-version: latest
 
-      - name: Install dependencies
+      - name: 📦 Install dependencies
         run: bun install
 
-      - name: Run crawler
+      - name: 🚀 Run crawler
+        id: crawler
         env:
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
         run: bun run src/index.ts
+        continue-on-error: true
 
-      - name: Generate summary
+      - name: 📊 Generate summary
+        if: always()
         env:
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
         run: bun run scripts/generate-summary.ts
+
+      - name: ❌ Report failure
+        if: steps.crawler.outcome == 'failure'
+        run: |
+          echo "::error::Crawler execution failed. Check logs above for details."
+          exit 1
