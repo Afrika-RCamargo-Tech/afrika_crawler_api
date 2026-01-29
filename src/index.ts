@@ -28,11 +28,13 @@ async function run() {
     
     // Agrupar por categoria para exibição hierárquica
     let currentCategory = '';
-    let categoryNewCount = 0;
-    let categoryUpdatedCount = 0;
-    let itemsInCategory = 0;
+    let globalIndex = 0;
+    const totalUpdates = updates.length;
+    const numDigits = totalUpdates.toString().length;
 
     for (const update of updates) {
+      globalIndex++;
+      
       // Cria ID único baseado em hash de tool + date + version
       const dateStr = update.date.toISOString().split('T')[0]; // YYYY-MM-DD
       const hashInput = `${strategy.toolName}:${dateStr}:${update.version}`;
@@ -59,17 +61,15 @@ async function run() {
       if (category !== currentCategory) {
         // Se tinha categoria anterior, fecha ela
         if (currentCategory) {
-          console.log('');
+          console.log('│');
         }
         
         currentCategory = category;
-        categoryNewCount = 0;
-        categoryUpdatedCount = 0;
-        itemsInCategory = 0;
         console.log(`├── 📂 ${category}`);
       }
 
-      let updateType: 'new' | 'updated' | 'skipped' = 'skipped';
+      let updateType: 'new' | 'updated' | 'unchanged' = 'unchanged';
+      let statusIcon = '○';
 
       // Processa o update
       if (existing) {
@@ -85,36 +85,34 @@ async function run() {
             { new: true }
           );
           updateType = 'updated';
+          statusIcon = '📝';
           updatedCount++;
-          categoryUpdatedCount++;
         } else {
+          updateType = 'unchanged';
+          statusIcon = '○';
           unchangedCount++;
         }
       } else {
         await UpdateModel.create(newData);
         updateType = 'new';
+        statusIcon = '✨';
         newCount++;
-        categoryNewCount++;
       }
 
-      // Exibir apenas se for novo ou atualizado
-      if (updateType !== 'skipped') {
-        itemsInCategory++;
-        const icon = updateType === 'new' ? '✨' : '📝';
-        const truncated = versionOnly.length > 55 
-          ? versionOnly.substring(0, 52) + '...' 
-          : versionOnly;
-        
-        // Limitar a 5 itens por categoria para não poluir
-        if (itemsInCategory <= 5) {
-          console.log(`│   ├── ${icon} ${truncated}`);
-        } else if (itemsInCategory === 6) {
-          console.log(`│   └── ... (showing first 5, ${categoryNewCount + categoryUpdatedCount - 5} more in this category)`);
-        }
-      }
+      // Formatar número com zeros à esquerda
+      const numberStr = globalIndex.toString().padStart(numDigits, '0');
+      
+      // Truncar versão se muito longa
+      const maxLength = 50;
+      const truncated = versionOnly.length > maxLength 
+        ? versionOnly.substring(0, maxLength - 3) + '...' 
+        : versionOnly;
+      
+      // Exibir linha do update
+      console.log(`│   ├── [${numberStr}] ${statusIcon} ${truncated}`);
     }
 
-    console.log('');
+    console.log('│');
     console.log(`📊 Summary: ${newCount} new, ${updatedCount} updated, ${unchangedCount} unchanged\n`);
   }
 
