@@ -3,1173 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Afrika Crawler - Security Updates</title>
+    <meta name="description" content="Afrika Crawler - Monitor de atualizações de ferramentas de segurança">
+    <meta name="theme-color" content="#6366f1">
     
+    <title>Afrika Crawler - Security Updates Monitor</title>
+    
+    <!-- Preconnect to external resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- External Libraries -->
     <!-- FullCalendar -->
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
     
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
     
-    <!-- Tippy.js for tooltips -->
+    <!-- Tippy.js -->
     <script src="https://unpkg.com/@popperjs/core@2"></script>
     <script src="https://unpkg.com/tippy.js@6"></script>
     <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/animations/shift-away.css">
     
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --bg-primary: #ffffff;
-            --bg-secondary: #f8fafc;
-            --bg-tertiary: #f1f5f9;
-            --border-color: #e2e8f0;
-            --border-hover: #cbd5e1;
-            --text-primary: #0f172a;
-            --text-secondary: #475569;
-            --text-muted: #94a3b8;
-            --accent: #3b82f6;
-            --accent-hover: #2563eb;
-            --accent-light: #eff6ff;
-            --success: #22c55e;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-            background: var(--bg-secondary);
-            min-height: 100vh;
-            color: var(--text-primary);
-            line-height: 1.6;
-        }
-
-        /* Header */
-        .header {
-            background: var(--bg-primary);
-            border-bottom: 1px solid var(--border-color);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .header-content {
-            max-width: 1600px;
-            margin: 0 auto;
-            padding: 1rem 1.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .logo-icon {
-            width: 40px;
-            height: 40px;
-            background: var(--text-primary);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-        }
-
-        .logo h1 {
-            font-size: 1.375rem;
-            font-weight: 600;
-        }
-
-        .logo span {
-            font-size: 0.8125rem;
-            color: var(--text-muted);
-            font-weight: 400;
-        }
-
-        .header-actions {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        /* Main Container */
-        .container {
-            max-width: 1600px;
-            margin: 0 auto;
-            padding: 1.5rem;
-        }
-
-        /* Stats Bar */
-        .stats-bar {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .stat-card {
-            background: var(--bg-primary);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 1.25rem;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .stat-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .stat-icon.blue { background: #eff6ff; color: #3b82f6; }
-        .stat-icon.green { background: #f0fdf4; color: #22c55e; }
-        .stat-icon.purple { background: #faf5ff; color: #a855f7; }
-        .stat-icon.orange { background: #fff7ed; color: #f97316; }
-
-        .stat-info h3 {
-            font-size: 1.75rem;
-            font-weight: 600;
-            line-height: 1;
-        }
-
-        .stat-info p {
-            font-size: 0.8125rem;
-            color: var(--text-secondary);
-            margin-top: 0.25rem;
-        }
-
-        /* Toolbar */
-        .toolbar {
-            background: var(--bg-primary);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .toolbar-row {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-
-        .toolbar-row + .toolbar-row {
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid var(--border-color);
-        }
-
-        .search-box {
-            flex: 1;
-            min-width: 250px;
-            position: relative;
-        }
-
-        .search-box input {
-            width: 100%;
-            padding: 0.625rem 0.875rem 0.625rem 2.5rem;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            font-size: 0.875rem;
-            transition: all 0.2s;
-        }
-
-        .search-box input:focus {
-            outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px var(--accent-light);
-        }
-
-        .search-box .search-icon {
-            position: absolute;
-            left: 0.75rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-muted);
-            pointer-events: none;
-        }
-
-        .filter-group {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .filter-group label {
-            font-size: 0.8125rem;
-            color: var(--text-secondary);
-            white-space: nowrap;
-        }
-
-        select {
-            padding: 0.625rem 2rem 0.625rem 0.875rem;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            font-size: 0.875rem;
-            background: var(--bg-primary);
-            cursor: pointer;
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 0.5rem center;
-        }
-
-        select:focus {
-            outline: none;
-            border-color: var(--accent);
-        }
-
-        .view-toggle {
-            display: flex;
-            background: var(--bg-tertiary);
-            border-radius: 8px;
-            padding: 4px;
-        }
-
-        .view-btn {
-            padding: 0.5rem 1rem;
-            border: none;
-            background: transparent;
-            border-radius: 6px;
-            font-size: 0.8125rem;
-            font-weight: 500;
-            color: var(--text-secondary);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 0.375rem;
-            transition: all 0.2s;
-        }
-
-        .view-btn:hover {
-            color: var(--text-primary);
-        }
-
-        .view-btn.active {
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-
-        .btn {
-            padding: 0.625rem 1rem;
-            border: 1px solid var(--border-color);
-            background: var(--bg-primary);
-            border-radius: 8px;
-            font-size: 0.875rem;
-            font-weight: 500;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            transition: all 0.2s;
-            color: var(--text-primary);
-        }
-
-        .btn:hover {
-            background: var(--bg-tertiary);
-            border-color: var(--border-hover);
-        }
-
-        .btn-primary {
-            background: var(--text-primary);
-            color: white;
-            border-color: var(--text-primary);
-        }
-
-        .btn-primary:hover {
-            background: #1e293b;
-        }
-
-        /* Content Views */
-        .content-view {
-            display: none;
-        }
-
-        .content-view.active {
-            display: block;
-        }
-
-        /* Cards View */
-        .updates-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-            gap: 1rem;
-        }
-
-        .update-card {
-            background: var(--bg-primary);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 1.25rem;
-            transition: all 0.2s;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .update-card:hover {
-            border-color: var(--border-hover);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-        }
-
-        .update-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 1rem;
-            gap: 0.75rem;
-        }
-
-        .tool-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.375rem;
-            background: var(--bg-tertiary);
-            color: var(--text-primary);
-            padding: 0.375rem 0.75rem;
-            border-radius: 6px;
-            font-size: 0.8125rem;
-            font-weight: 500;
-        }
-
-        .date-badge {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            display: flex;
-            align-items: center;
-            gap: 0.25rem;
-        }
-
-        .version {
-            font-size: 1.125rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 0.5rem;
-            word-break: break-word;
-        }
-
-        .description {
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-            line-height: 1.6;
-            flex-grow: 1;
-        }
-
-        .card-footer {
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .link {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.375rem;
-            color: var(--accent);
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.875rem;
-            transition: color 0.2s;
-        }
-
-        .link:hover {
-            color: var(--accent-hover);
-        }
-
-        /* Table View */
-        .table-container {
-            background: var(--bg-primary);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        .table-wrapper {
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th {
-            text-align: left;
-            padding: 0.875rem 1rem;
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--text-secondary);
-            background: var(--bg-tertiary);
-            border-bottom: 1px solid var(--border-color);
-            white-space: nowrap;
-            cursor: pointer;
-            user-select: none;
-        }
-
-        th:hover {
-            background: var(--bg-secondary);
-        }
-
-        th .sort-icon {
-            margin-left: 0.25rem;
-            opacity: 0.5;
-        }
-
-        th.sorted .sort-icon {
-            opacity: 1;
-        }
-
-        td {
-            padding: 1rem;
-            border-bottom: 1px solid var(--border-color);
-            font-size: 0.875rem;
-        }
-
-        tr:last-child td {
-            border-bottom: none;
-        }
-
-        tr:hover {
-            background: var(--bg-secondary);
-        }
-
-        .table-version {
-            font-weight: 600;
-        }
-
-        .table-description {
-            max-width: 400px;
-            color: var(--text-secondary);
-        }
-
-        /* Calendar View */
-        .calendar-container {
-            background: var(--bg-primary);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 1.5rem;
-        }
-
-        .fc {
-            font-family: inherit;
-        }
-
-        .fc .fc-toolbar-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-        }
-
-        .fc .fc-button {
-            background: var(--bg-primary);
-            border: 1px solid var(--border-color);
-            color: var(--text-primary);
-            font-weight: 500;
-            padding: 0.5rem 1rem;
-            text-transform: none;
-        }
-
-        .fc .fc-button:hover {
-            background: var(--bg-tertiary);
-        }
-
-        .fc .fc-button-primary:not(:disabled).fc-button-active,
-        .fc .fc-button-primary:not(:disabled):active {
-            background: var(--text-primary);
-            border-color: var(--text-primary);
-            color: white;
-        }
-
-        .fc .fc-daygrid-day-number {
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-        }
-
-        .fc .fc-daygrid-day.fc-day-today {
-            background: var(--accent-light);
-        }
-
-        .fc-event {
-            cursor: pointer;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 0.75rem;
-        }
-
-        .fc-event-title {
-            font-weight: 500;
-        }
-
-        /* Pagination */
-        .pagination-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 1.5rem;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .pagination-info {
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-        }
-
-        .pagination {
-            display: flex;
-            gap: 0.25rem;
-        }
-
-        .page-btn {
-            min-width: 40px;
-            height: 40px;
-            border: 1px solid var(--border-color);
-            background: var(--bg-primary);
-            border-radius: 8px;
-            font-size: 0.875rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-            color: var(--text-primary);
-        }
-
-        .page-btn:hover:not(:disabled) {
-            background: var(--bg-tertiary);
-            border-color: var(--border-hover);
-        }
-
-        .page-btn.active {
-            background: var(--text-primary);
-            border-color: var(--text-primary);
-            color: white;
-        }
-
-        .page-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        /* Loading & States */
-        .loading-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(255,255,255,0.8);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .loading-overlay.active {
-            display: flex;
-        }
-
-        .loading-spinner {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .spinner {
-            width: 48px;
-            height: 48px;
-            border: 3px solid var(--border-color);
-            border-top-color: var(--accent);
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .error-banner {
-            background: #fef2f2;
-            border: 1px solid #fecaca;
-            color: #991b1b;
-            padding: 1rem;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-            display: none;
-        }
-
-        .error-banner.visible {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 4rem 2rem;
-            background: var(--bg-primary);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-        }
-
-        .empty-state-icon {
-            width: 64px;
-            height: 64px;
-            background: var(--bg-tertiary);
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1rem;
-            color: var(--text-muted);
-        }
-
-        .empty-state h3 {
-            font-size: 1.125rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .empty-state p {
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-        }
-
-        /* Tooltip */
-        .tippy-box[data-theme~='custom'] {
-            background: var(--text-primary);
-            color: white;
-            font-size: 0.8125rem;
-            border-radius: 8px;
-            padding: 0.25rem;
-        }
-
-        .tippy-box[data-theme~='custom'] .tippy-arrow {
-            color: var(--text-primary);
-        }
-
-        /* Modal */
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.5);
-            z-index: 1000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-        }
-
-        .modal-overlay.active {
-            display: flex;
-        }
-
-        .modal {
-            background: var(--bg-primary);
-            border-radius: 16px;
-            max-width: 600px;
-            width: 100%;
-            max-height: 90vh;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .modal-header {
-            padding: 1.25rem 1.5rem;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .modal-header h2 {
-            font-size: 1.125rem;
-            font-weight: 600;
-        }
-
-        .modal-close {
-            width: 32px;
-            height: 32px;
-            border: none;
-            background: transparent;
-            border-radius: 6px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-secondary);
-        }
-
-        .modal-close:hover {
-            background: var(--bg-tertiary);
-        }
-
-        .modal-body {
-            padding: 1.5rem;
-            overflow-y: auto;
-        }
-
-        .detail-row {
-            display: flex;
-            gap: 1rem;
-            padding: 0.75rem 0;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .detail-row:last-child {
-            border-bottom: none;
-        }
-
-        .detail-label {
-            font-size: 0.8125rem;
-            color: var(--text-secondary);
-            min-width: 100px;
-        }
-
-        .detail-value {
-            font-size: 0.875rem;
-            color: var(--text-primary);
-        }
-
-        /* Timeline View */
-        .timeline-container {
-            background: var(--bg-primary);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 1.5rem;
-        }
-
-        .timeline {
-            position: relative;
-        }
-
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 20px;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background: var(--border-color);
-        }
-
-        .timeline-item {
-            position: relative;
-            padding-left: 50px;
-            padding-bottom: 1.5rem;
-        }
-
-        .timeline-item:last-child {
-            padding-bottom: 0;
-        }
-
-        .timeline-dot {
-            position: absolute;
-            left: 12px;
-            top: 4px;
-            width: 18px;
-            height: 18px;
-            background: var(--bg-primary);
-            border: 3px solid var(--accent);
-            border-radius: 50%;
-        }
-
-        .timeline-date {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-        }
-
-        .timeline-content {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 1rem;
-        }
-
-        .timeline-title {
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-        }
-
-        .timeline-tool {
-            font-size: 0.8125rem;
-            color: var(--text-secondary);
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .header-content {
-                padding: 1rem;
-            }
-
-            .container {
-                padding: 1rem;
-            }
-
-            .stats-bar {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .stat-card {
-                padding: 1rem;
-            }
-
-            .stat-icon {
-                width: 40px;
-                height: 40px;
-            }
-
-            .stat-info h3 {
-                font-size: 1.375rem;
-            }
-
-            .toolbar-row {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .search-box {
-                min-width: 100%;
-            }
-
-            .filter-group {
-                justify-content: space-between;
-            }
-
-            .filter-group select {
-                flex: 1;
-            }
-
-            .view-toggle {
-                justify-content: center;
-                flex-wrap: wrap;
-            }
-
-            .updates-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .pagination-container {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .pagination {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .stats-bar {
-                grid-template-columns: 1fr;
-            }
-
-            .logo h1 {
-                font-size: 1.125rem;
-            }
-
-            .header-actions {
-                display: none;
-            }
-
-            .view-btn span {
-                display: none;
-            }
-        }
-
-        /* API Docs Section */
-        .api-docs {
-            background: var(--bg-primary);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-top: 2rem;
-        }
-
-        .api-docs-header {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .api-docs-header h2 {
-            font-size: 1.25rem;
-            font-weight: 600;
-        }
-
-        .api-docs-header .api-badge {
-            background: var(--accent-light);
-            color: var(--accent);
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-
-        .api-endpoint {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            margin-bottom: 1rem;
-            overflow: hidden;
-        }
-
-        .api-endpoint:last-child {
-            margin-bottom: 0;
-        }
-
-        .api-endpoint-header {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 1rem;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .api-endpoint-header:hover {
-            background: var(--bg-tertiary);
-        }
-
-        .api-method {
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            font-weight: 700;
-            font-family: 'SF Mono', Monaco, 'Courier New', monospace;
-        }
-
-        .api-method.get {
-            background: #dcfce7;
-            color: #166534;
-        }
-
-        .api-method.post {
-            background: #dbeafe;
-            color: #1e40af;
-        }
-
-        .api-path {
-            font-family: 'SF Mono', Monaco, 'Courier New', monospace;
-            font-size: 0.875rem;
-            color: var(--text-primary);
-        }
-
-        .api-desc {
-            color: var(--text-secondary);
-            font-size: 0.8125rem;
-            margin-left: auto;
-        }
-
-        .api-endpoint-body {
-            display: none;
-            padding: 1rem;
-            border-top: 1px solid var(--border-color);
-            background: var(--bg-primary);
-        }
-
-        .api-endpoint.open .api-endpoint-body {
-            display: block;
-        }
-
-        .api-endpoint.open .api-endpoint-header {
-            background: var(--bg-tertiary);
-        }
-
-        .api-section-title {
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 0.5rem;
-        }
-
-        .api-params {
-            margin-bottom: 1rem;
-        }
-
-        .api-param {
-            display: flex;
-            gap: 0.75rem;
-            padding: 0.5rem 0;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .api-param:last-child {
-            border-bottom: none;
-        }
-
-        .api-param-name {
-            font-family: 'SF Mono', Monaco, 'Courier New', monospace;
-            font-size: 0.8125rem;
-            color: var(--accent);
-            min-width: 80px;
-        }
-
-        .api-param-type {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            background: var(--bg-tertiary);
-            padding: 0.125rem 0.5rem;
-            border-radius: 4px;
-        }
-
-        .api-param-desc {
-            font-size: 0.8125rem;
-            color: var(--text-secondary);
-        }
-
-        .api-code-block {
-            background: #1e293b;
-            border-radius: 8px;
-            padding: 1rem;
-            overflow-x: auto;
-            margin-top: 0.5rem;
-        }
-
-        .api-code-block code {
-            font-family: 'SF Mono', Monaco, 'Courier New', monospace;
-            font-size: 0.8125rem;
-            color: #e2e8f0;
-            white-space: pre;
-        }
-
-        .api-code-block .comment {
-            color: #64748b;
-        }
-
-        .api-code-block .string {
-            color: #a5d6ff;
-        }
-
-        .api-code-block .key {
-            color: #7dd3fc;
-        }
-
-        .api-try-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            background: var(--accent);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 0.8125rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background 0.2s;
-            margin-top: 1rem;
-        }
-
-        .api-try-btn:hover {
-            background: var(--accent-hover);
-        }
-
-        .api-base-url {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            background: var(--bg-secondary);
-            padding: 0.75rem 1rem;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-        }
-
-        .api-base-url span {
-            font-size: 0.8125rem;
-            color: var(--text-secondary);
-        }
-
-        .api-base-url code {
-            font-family: 'SF Mono', Monaco, 'Courier New', monospace;
-            font-size: 0.875rem;
-            color: var(--text-primary);
-        }
-
-        .api-copy-btn {
-            margin-left: auto;
-            padding: 0.375rem 0.75rem;
-            background: var(--bg-primary);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            font-size: 0.75rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 0.375rem;
-            transition: all 0.2s;
-        }
-
-        .api-copy-btn:hover {
-            background: var(--bg-tertiary);
-            border-color: var(--border-hover);
-        }
-    </style>
+    <!-- AOS - Animate on Scroll -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <!-- Modular CSS -->
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/views.css">
+    <link rel="stylesheet" href="css/api-docs.css">
 </head>
 <body>
-    <!-- Header -->
+    <!-- ===== Header ===== -->
     <header class="header">
         <div class="header-content">
-            <div class="logo">
+            <div class="logo" data-aos="fade-right">
                 <div class="logo-icon">
                     <i data-lucide="shield-check" style="width: 24px; height: 24px;"></i>
                 </div>
-                <div>
+                <div class="logo-text">
                     <h1>Afrika Crawler</h1>
-                    <span>Security Tools Updates Monitor</span>
+                    <span>Security Updates Monitor</span>
                 </div>
             </div>
-            <div class="header-actions">
-                <button class="btn" onclick="exportData()">
-                    <i data-lucide="download" style="width: 16px; height: 16px;"></i>
-                    Exportar
+            
+            <div class="header-actions" data-aos="fade-left">
+                <button class="btn btn-ghost" data-theme-toggle aria-label="Alternar tema">
+                    <i data-lucide="moon" style="width: 18px; height: 18px;"></i>
                 </button>
-                <button class="btn btn-primary" onclick="refreshData()">
+                <button class="btn" onclick="App.exportData('csv')">
+                    <i data-lucide="download" style="width: 16px; height: 16px;"></i>
+                    <span>Exportar</span>
+                </button>
+                <button class="btn btn-primary" onclick="App.refreshData()">
                     <i data-lucide="refresh-cw" style="width: 16px; height: 16px;"></i>
-                    Atualizar
+                    <span>Atualizar</span>
                 </button>
             </div>
         </div>
     </header>
 
-    <!-- Main Content -->
-    <div class="container">
+    <!-- ===== Main Content ===== -->
+    <main class="main-content">
         <!-- Stats Bar -->
-        <div class="stats-bar" id="statsBar">
+        <section class="stats-bar" data-aos="fade-up" data-aos-delay="100">
             <div class="stat-card">
                 <div class="stat-icon blue">
                     <i data-lucide="package" style="width: 24px; height: 24px;"></i>
                 </div>
                 <div class="stat-info">
-                    <h3 id="statTotal">-</h3>
-                    <p>Total de Updates</p>
+                    <span class="stat-value" id="statTotal">-</span>
+                    <span class="stat-label">Total de Updates</span>
                 </div>
             </div>
             <div class="stat-card">
@@ -1177,8 +92,8 @@
                     <i data-lucide="layers" style="width: 24px; height: 24px;"></i>
                 </div>
                 <div class="stat-info">
-                    <h3 id="statTools">-</h3>
-                    <p>Ferramentas</p>
+                    <span class="stat-value" id="statTools">-</span>
+                    <span class="stat-label">Ferramentas</span>
                 </div>
             </div>
             <div class="stat-card">
@@ -1186,8 +101,8 @@
                     <i data-lucide="calendar" style="width: 24px; height: 24px;"></i>
                 </div>
                 <div class="stat-info">
-                    <h3 id="statRecent">-</h3>
-                    <p>Updates este mês</p>
+                    <span class="stat-value" id="statRecent">-</span>
+                    <span class="stat-label">Updates este mês</span>
                 </div>
             </div>
             <div class="stat-card">
@@ -1195,28 +110,34 @@
                     <i data-lucide="clock" style="width: 24px; height: 24px;"></i>
                 </div>
                 <div class="stat-info">
-                    <h3 id="statDays">-</h3>
-                    <p>Dias desde último update</p>
+                    <span class="stat-value" id="statDays">-</span>
+                    <span class="stat-label">Dias desde último</span>
                 </div>
             </div>
-        </div>
+        </section>
 
         <!-- Toolbar -->
-        <div class="toolbar">
+        <section class="toolbar" data-aos="fade-up" data-aos-delay="200">
             <div class="toolbar-row">
                 <div class="search-box">
-                    <i data-lucide="search" class="search-icon" style="width: 16px; height: 16px;"></i>
-                    <input type="text" id="searchInput" placeholder="Buscar por versão, ferramenta ou descrição...">
+                    <i data-lucide="search" class="search-icon" style="width: 18px; height: 18px;"></i>
+                    <input 
+                        type="search" 
+                        id="searchInput" 
+                        class="input input-icon-left" 
+                        placeholder="Buscar por versão, ferramenta ou descrição..."
+                        aria-label="Buscar updates"
+                    >
                 </div>
                 <div class="filter-group">
-                    <label>Ferramenta:</label>
-                    <select id="toolFilter">
+                    <label for="toolFilter">Ferramenta:</label>
+                    <select id="toolFilter" class="select">
                         <option value="">Todas</option>
                     </select>
                 </div>
                 <div class="filter-group">
-                    <label>Período:</label>
-                    <select id="dateFilter">
+                    <label for="dateFilter">Período:</label>
+                    <select id="dateFilter" class="select">
                         <option value="">Todo período</option>
                         <option value="7">Últimos 7 dias</option>
                         <option value="30">Últimos 30 dias</option>
@@ -1227,23 +148,23 @@
             </div>
             <div class="toolbar-row">
                 <div class="filter-group">
-                    <label>Ordenar por:</label>
-                    <select id="sortField">
+                    <label for="sortField">Ordenar:</label>
+                    <select id="sortField" class="select">
                         <option value="date">Data</option>
                         <option value="tool">Ferramenta</option>
                         <option value="version">Versão</option>
                     </select>
                 </div>
                 <div class="filter-group">
-                    <label>Ordem:</label>
-                    <select id="sortOrder">
+                    <label for="sortOrder">Ordem:</label>
+                    <select id="sortOrder" class="select">
                         <option value="desc">Mais recentes</option>
                         <option value="asc">Mais antigos</option>
                     </select>
                 </div>
                 <div class="filter-group">
-                    <label>Por página:</label>
-                    <select id="perPage">
+                    <label for="perPage">Por página:</label>
+                    <select id="perPage" class="select">
                         <option value="12">12</option>
                         <option value="24" selected>24</option>
                         <option value="48">48</option>
@@ -1251,52 +172,62 @@
                     </select>
                 </div>
                 <div style="flex: 1;"></div>
-                <div class="view-toggle">
-                    <button class="view-btn active" data-view="cards" title="Visualização em Cards">
+                <div class="view-toggle" role="tablist" aria-label="Tipo de visualização">
+                    <button class="view-btn active" data-view="cards" role="tab" aria-selected="true" title="Visualização em Cards">
                         <i data-lucide="layout-grid" style="width: 16px; height: 16px;"></i>
                         <span>Cards</span>
                     </button>
-                    <button class="view-btn" data-view="table" title="Visualização em Tabela">
+                    <button class="view-btn" data-view="table" role="tab" aria-selected="false" title="Visualização em Tabela">
                         <i data-lucide="table" style="width: 16px; height: 16px;"></i>
                         <span>Tabela</span>
                     </button>
-                    <button class="view-btn" data-view="timeline" title="Visualização em Timeline">
+                    <button class="view-btn" data-view="timeline" role="tab" aria-selected="false" title="Visualização em Timeline">
                         <i data-lucide="git-commit" style="width: 16px; height: 16px;"></i>
                         <span>Timeline</span>
                     </button>
-                    <button class="view-btn" data-view="calendar" title="Visualização em Calendário">
+                    <button class="view-btn" data-view="calendar" role="tab" aria-selected="false" title="Visualização em Calendário">
                         <i data-lucide="calendar-days" style="width: 16px; height: 16px;"></i>
                         <span>Calendário</span>
                     </button>
+                    <button class="view-btn" data-view="charts" role="tab" aria-selected="false" title="Visualização em Gráficos">
+                        <i data-lucide="bar-chart-3" style="width: 16px; height: 16px;"></i>
+                        <span>Analytics</span>
+                    </button>
                 </div>
             </div>
-        </div>
+        </section>
 
         <!-- Error Banner -->
-        <div class="error-banner" id="errorBanner">
+        <div class="error-banner" id="errorBanner" role="alert">
             <i data-lucide="alert-circle" style="width: 20px; height: 20px;"></i>
             <span id="errorMessage"></span>
+            <button class="btn btn-sm btn-ghost" onclick="App.hideError()" aria-label="Fechar">
+                <i data-lucide="x" style="width: 16px; height: 16px;"></i>
+            </button>
         </div>
 
         <!-- Content Views -->
-        <div id="cardsView" class="content-view active">
+        <div id="cardsView" class="content-view active" role="tabpanel">
             <div class="updates-grid" id="updatesGrid"></div>
         </div>
 
-        <div id="tableView" class="content-view">
+        <div id="tableView" class="content-view" role="tabpanel">
             <div class="table-container">
                 <div class="table-wrapper">
-                    <table>
+                    <table class="data-table">
                         <thead>
                             <tr>
-                                <th onclick="handleSort('tool')">
-                                    Ferramenta <i data-lucide="arrow-up-down" class="sort-icon" style="width: 14px; height: 14px;"></i>
+                                <th onclick="App.handleSort && App.handleSort('tool')">
+                                    Ferramenta
+                                    <i data-lucide="arrow-up-down" class="sort-icon" style="width: 14px; height: 14px;"></i>
                                 </th>
-                                <th onclick="handleSort('version')">
-                                    Versão <i data-lucide="arrow-up-down" class="sort-icon" style="width: 14px; height: 14px;"></i>
+                                <th onclick="App.handleSort && App.handleSort('version')">
+                                    Versão
+                                    <i data-lucide="arrow-up-down" class="sort-icon" style="width: 14px; height: 14px;"></i>
                                 </th>
-                                <th onclick="handleSort('date')">
-                                    Data <i data-lucide="arrow-up-down" class="sort-icon" style="width: 14px; height: 14px;"></i>
+                                <th onclick="App.handleSort && App.handleSort('date')">
+                                    Data
+                                    <i data-lucide="arrow-up-down" class="sort-icon" style="width: 14px; height: 14px;"></i>
                                 </th>
                                 <th>Descrição</th>
                                 <th>Ações</th>
@@ -1308,123 +239,212 @@
             </div>
         </div>
 
-        <div id="timelineView" class="content-view">
+        <div id="timelineView" class="content-view" role="tabpanel">
             <div class="timeline-container">
                 <div class="timeline" id="timeline"></div>
             </div>
         </div>
 
-        <div id="calendarView" class="content-view">
+        <div id="calendarView" class="content-view" role="tabpanel">
             <div class="calendar-container">
                 <div id="calendar"></div>
             </div>
         </div>
 
-        <!-- Pagination -->
-        <div class="pagination-container" id="paginationContainer">
-            <div class="pagination-info" id="paginationInfo"></div>
-            <div class="pagination" id="pagination"></div>
+        <div id="chartsView" class="content-view" role="tabpanel">
+            <div class="charts-container">
+                <div class="chart-card" data-aos="fade-up">
+                    <div class="chart-header">
+                        <h3 class="chart-title">
+                            <i data-lucide="trending-up" style="width: 20px; height: 20px; color: var(--color-primary);"></i>
+                            Updates ao Longo do Tempo
+                        </h3>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="timelineChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="chart-header">
+                        <h3 class="chart-title">
+                            <i data-lucide="pie-chart" style="width: 20px; height: 20px; color: var(--color-primary);"></i>
+                            Distribuição por Ferramenta
+                        </h3>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="toolsChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="chart-header">
+                        <h3 class="chart-title">
+                            <i data-lucide="activity" style="width: 20px; height: 20px; color: var(--color-primary);"></i>
+                            Atividade por Dia da Semana
+                        </h3>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="activityChart"></canvas>
+                    </div>
+                </div>
+            </div>
         </div>
 
+        <!-- Pagination -->
+        <nav class="pagination-container" id="paginationContainer" aria-label="Paginação">
+            <div class="pagination-info" id="paginationInfo"></div>
+            <div class="pagination" id="pagination" role="navigation"></div>
+        </nav>
+
         <!-- API Documentation -->
-        <section class="api-docs" id="apiDocs">
+        <section class="api-docs" id="apiDocs" data-aos="fade-up">
             <div class="api-docs-header">
-                <i data-lucide="code-2" style="width: 24px; height: 24px; color: var(--accent);"></i>
-                <h2>API Documentation</h2>
-                <span class="api-badge">REST API</span>
+                <div class="api-docs-icon">
+                    <i data-lucide="code-2" style="width: 24px; height: 24px;"></i>
+                </div>
+                <div class="api-docs-title">
+                    <h2>API Documentation</h2>
+                    <p>Integre os dados de updates em suas aplicações</p>
+                </div>
+                <span class="api-badge">
+                    <i data-lucide="zap" style="width: 12px; height: 12px;"></i>
+                    REST API
+                </span>
             </div>
 
             <div class="api-base-url">
-                <i data-lucide="globe" style="width: 16px; height: 16px; color: var(--text-muted);"></i>
-                <span>Base URL:</span>
-                <code id="apiBaseUrl">https://afrikacrawlerapi.vercel.app/api</code>
-                <button class="api-copy-btn" onclick="copyApiUrl()">
+                <div class="api-base-url-icon">
+                    <i data-lucide="globe" style="width: 20px; height: 20px;"></i>
+                </div>
+                <div class="api-base-url-content">
+                    <div class="api-base-url-label">Base URL</div>
+                    <code id="apiBaseUrl">https://afrikacrawlerapi.vercel.app/api</code>
+                </div>
+                <button class="api-copy-btn" onclick="App.copyApiUrl()">
                     <i data-lucide="copy" style="width: 14px; height: 14px;"></i>
                     Copiar
                 </button>
             </div>
 
-            <!-- GET /updates -->
-            <div class="api-endpoint" id="endpoint-updates">
-                <div class="api-endpoint-header" onclick="toggleEndpoint('endpoint-updates')">
-                    <span class="api-method get">GET</span>
-                    <span class="api-path">/updates</span>
-                    <span class="api-desc">Lista todos os updates das ferramentas</span>
-                    <i data-lucide="chevron-down" style="width: 18px; height: 18px; color: var(--text-muted); margin-left: auto;"></i>
-                </div>
-                <div class="api-endpoint-body">
-                    <div class="api-params">
-                        <div class="api-section-title">Query Parameters</div>
-                        <div class="api-param">
-                            <span class="api-param-name">tool</span>
-                            <span class="api-param-type">string</span>
-                            <span class="api-param-desc">Filtrar por ferramenta (ex: Veracode)</span>
-                        </div>
-                        <div class="api-param">
-                            <span class="api-param-name">limit</span>
-                            <span class="api-param-type">number</span>
-                            <span class="api-param-desc">Limite de resultados (padrão: 20)</span>
-                        </div>
+            <div class="api-endpoints">
+                <!-- GET /updates -->
+                <article class="api-endpoint" id="endpoint-updates">
+                    <div class="api-endpoint-header" onclick="App.toggleEndpoint('endpoint-updates')">
+                        <span class="api-method get">GET</span>
+                        <span class="api-path">/updates</span>
+                        <span class="api-desc">Lista todos os updates das ferramentas</span>
+                        <span class="api-endpoint-toggle">
+                            <i data-lucide="chevron-down" style="width: 18px; height: 18px;"></i>
+                        </span>
                     </div>
+                    <div class="api-endpoint-body">
+                        <div class="api-section">
+                            <div class="api-section-title">Query Parameters</div>
+                            <div class="api-params">
+                                <div class="api-param">
+                                    <span class="api-param-name">tool</span>
+                                    <span class="api-param-type">string</span>
+                                    <span class="api-param-desc">Filtrar por ferramenta (ex: Veracode)</span>
+                                </div>
+                                <div class="api-param">
+                                    <span class="api-param-name">limit</span>
+                                    <span class="api-param-type">number</span>
+                                    <span class="api-param-desc">Limite de resultados (padrão: 20)</span>
+                                </div>
+                            </div>
+                        </div>
 
-                    <div class="api-section-title">Exemplo de Resposta</div>
-                    <div class="api-code-block">
+                        <div class="api-section">
+                            <div class="api-section-title">Exemplo de Resposta</div>
+                            <div class="api-code-block">
+                                <div class="api-code-header">
+                                    <span class="api-code-lang">JSON</span>
+                                </div>
+                                <div class="api-code-content">
 <code>[{
   <span class="key">"tool"</span>: <span class="string">"Veracode"</span>,
-  <span class="key">"version"</span>: <span class="string">"CLI updates - Veracode CLI v3.5.0"</span>,
+  <span class="key">"version"</span>: <span class="string">"CLI v3.5.0"</span>,
   <span class="key">"date"</span>: <span class="string">"2026-01-28T12:00:00.000Z"</span>,
-  <span class="key">"description"</span>: <span class="string">"New features and improvements..."</span>,
-  <span class="key">"link"</span>: <span class="string">"https://docs.veracode.com/updates/..."</span>
+  <span class="key">"description"</span>: <span class="string">"New features..."</span>,
+  <span class="key">"link"</span>: <span class="string">"https://docs.veracode.com/..."</span>
 }]</code>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="api-try-btn" onclick="App.tryApiEndpoint('/updates?limit=5')">
+                            <i data-lucide="play" style="width: 14px; height: 14px;"></i>
+                            Testar no navegador
+                        </button>
                     </div>
+                </article>
 
-                    <button class="api-try-btn" onclick="tryApiEndpoint('/updates?limit=5')">
-                        <i data-lucide="play" style="width: 14px; height: 14px;"></i>
-                        Testar no navegador
-                    </button>
-                </div>
-            </div>
-
-            <!-- GET / -->
-            <div class="api-endpoint" id="endpoint-health">
-                <div class="api-endpoint-header" onclick="toggleEndpoint('endpoint-health')">
-                    <span class="api-method get">GET</span>
-                    <span class="api-path">/</span>
-                    <span class="api-desc">Health check da API</span>
-                    <i data-lucide="chevron-down" style="width: 18px; height: 18px; color: var(--text-muted); margin-left: auto;"></i>
-                </div>
-                <div class="api-endpoint-body">
-                    <div class="api-section-title">Exemplo de Resposta</div>
-                    <div class="api-code-block">
+                <!-- GET / -->
+                <article class="api-endpoint" id="endpoint-health">
+                    <div class="api-endpoint-header" onclick="App.toggleEndpoint('endpoint-health')">
+                        <span class="api-method get">GET</span>
+                        <span class="api-path">/</span>
+                        <span class="api-desc">Health check da API</span>
+                        <span class="api-endpoint-toggle">
+                            <i data-lucide="chevron-down" style="width: 18px; height: 18px;"></i>
+                        </span>
+                    </div>
+                    <div class="api-endpoint-body">
+                        <div class="api-section">
+                            <div class="api-section-title">Exemplo de Resposta</div>
+                            <div class="api-code-block">
+                                <div class="api-code-header">
+                                    <span class="api-code-lang">JSON</span>
+                                </div>
+                                <div class="api-code-content">
 <code>{
   <span class="key">"status"</span>: <span class="string">"ok"</span>,
   <span class="key">"message"</span>: <span class="string">"Afrika Crawler API is running 🚀"</span>
 }</code>
-                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-                    <button class="api-try-btn" onclick="tryApiEndpoint('/')">
-                        <i data-lucide="play" style="width: 14px; height: 14px;"></i>
-                        Testar no navegador
-                    </button>
-                </div>
+                        <button class="api-try-btn" onclick="App.tryApiEndpoint('/')">
+                            <i data-lucide="play" style="width: 14px; height: 14px;"></i>
+                            Testar no navegador
+                        </button>
+                    </div>
+                </article>
             </div>
         </section>
-    </div>
+    </main>
 
-    <!-- Loading Overlay -->
-    <div class="loading-overlay" id="loadingOverlay">
+    <!-- ===== Footer ===== -->
+    <footer style="text-align: center; padding: 2rem; color: var(--text-muted); font-size: 0.875rem;">
+        <p>
+            <i data-lucide="shield-check" style="width: 16px; height: 16px; vertical-align: middle;"></i>
+            Afrika Crawler &copy; 2026 — Monitorando updates de segurança
+        </p>
+    </footer>
+
+    <!-- ===== Loading Overlay ===== -->
+    <div class="loading-overlay" id="loadingOverlay" aria-hidden="true">
         <div class="loading-spinner">
-            <div class="spinner"></div>
-            <span style="color: var(--text-secondary);">Carregando updates...</span>
+            <div class="spinner-dots">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <span style="color: var(--text-secondary); font-size: 0.9375rem; font-weight: 500;">
+                Carregando updates...
+            </span>
         </div>
     </div>
 
-    <!-- Detail Modal -->
-    <div class="modal-overlay" id="detailModal">
+    <!-- ===== Detail Modal ===== -->
+    <div class="modal-overlay" id="detailModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
         <div class="modal">
             <div class="modal-header">
-                <h2>Detalhes do Update</h2>
-                <button class="modal-close" onclick="closeModal()">
+                <h2 class="modal-title" id="modalTitle">
+                    <i data-lucide="info" style="width: 20px; height: 20px; color: var(--color-primary);"></i>
+                    Detalhes do Update
+                </h2>
+                <button class="modal-close" onclick="App.closeModal()" aria-label="Fechar modal">
                     <i data-lucide="x" style="width: 20px; height: 20px;"></i>
                 </button>
             </div>
@@ -1432,658 +452,25 @@
         </div>
     </div>
 
+    <!-- ===== Toast Container ===== -->
+    <div class="toast-container" aria-live="polite"></div>
+
+    <!-- ===== Scripts ===== -->
+    <script src="js/utils.js"></script>
+    <script src="js/toast.js"></script>
+    <script src="js/theme.js"></script>
+    <script src="js/components.js"></script>
+    <script src="js/charts.js"></script>
+    <script src="js/app.js"></script>
+    
+    <!-- Initialize AOS -->
     <script>
-        // State
-        const API_URL = 'https://afrikacrawlerapi.vercel.app/api';
-        let allUpdates = [];
-        let filteredUpdates = [];
-        let currentPage = 1;
-        let perPage = 24;
-        let currentView = 'cards';
-        let calendar = null;
-        let sortField = 'date';
-        let sortOrder = 'desc';
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            lucide.createIcons();
-            setupEventListeners();
-            loadAllUpdates();
+        AOS.init({
+            duration: 600,
+            easing: 'ease-out-cubic',
+            once: true,
+            offset: 50
         });
-
-        function setupEventListeners() {
-            // Search with debounce
-            let searchTimeout;
-            document.getElementById('searchInput').addEventListener('input', (e) => {
-                clearTimeout(searchTimeout);
-                searchTimeout = setTimeout(() => {
-                    currentPage = 1;
-                    applyFilters();
-                }, 300);
-            });
-
-            // Filters
-            document.getElementById('toolFilter').addEventListener('change', () => {
-                currentPage = 1;
-                applyFilters();
-            });
-
-            document.getElementById('dateFilter').addEventListener('change', () => {
-                currentPage = 1;
-                applyFilters();
-            });
-
-            document.getElementById('sortField').addEventListener('change', (e) => {
-                sortField = e.target.value;
-                currentPage = 1;
-                applyFilters();
-            });
-
-            document.getElementById('sortOrder').addEventListener('change', (e) => {
-                sortOrder = e.target.value;
-                currentPage = 1;
-                applyFilters();
-            });
-
-            document.getElementById('perPage').addEventListener('change', (e) => {
-                perPage = parseInt(e.target.value);
-                currentPage = 1;
-                applyFilters();
-            });
-
-            // View toggle
-            document.querySelectorAll('.view-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    switchView(btn.dataset.view);
-                });
-            });
-
-            // Modal close
-            document.getElementById('detailModal').addEventListener('click', (e) => {
-                if (e.target.id === 'detailModal') closeModal();
-            });
-
-            // Keyboard shortcuts
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') closeModal();
-            });
-        }
-
-        async function loadAllUpdates() {
-            showLoading(true);
-            hideError();
-
-            try {
-                const response = await fetch(`${API_URL}/updates?limit=1000`);
-                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                
-                allUpdates = await response.json();
-                if (allUpdates.error) throw new Error(allUpdates.error);
-
-                populateToolFilter();
-                updateStats();
-                applyFilters();
-            } catch (err) {
-                showError(err.message);
-            } finally {
-                showLoading(false);
-            }
-        }
-
-        function populateToolFilter() {
-            const tools = [...new Set(allUpdates.map(u => u.tool))].sort();
-            const select = document.getElementById('toolFilter');
-            select.innerHTML = '<option value="">Todas</option>' +
-                tools.map(t => `<option value="${t}">${t}</option>`).join('');
-        }
-
-        function updateStats() {
-            const now = new Date();
-            const thisMonth = allUpdates.filter(u => {
-                const d = new Date(u.date);
-                return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
-            });
-
-            const tools = new Set(allUpdates.map(u => u.tool));
-            const mostRecent = allUpdates.length > 0 ? new Date(allUpdates[0].date) : now;
-            const daysSince = Math.floor((now - mostRecent) / (1000 * 60 * 60 * 24));
-
-            document.getElementById('statTotal').textContent = allUpdates.length;
-            document.getElementById('statTools').textContent = tools.size;
-            document.getElementById('statRecent').textContent = thisMonth.length;
-            document.getElementById('statDays').textContent = daysSince;
-        }
-
-        function applyFilters() {
-            const search = document.getElementById('searchInput').value.toLowerCase();
-            const tool = document.getElementById('toolFilter').value;
-            const days = document.getElementById('dateFilter').value;
-
-            filteredUpdates = allUpdates.filter(u => {
-                // Search
-                if (search) {
-                    const searchable = `${u.tool} ${u.version} ${u.description || ''}`.toLowerCase();
-                    if (!searchable.includes(search)) return false;
-                }
-
-                // Tool filter
-                if (tool && u.tool !== tool) return false;
-
-                // Date filter
-                if (days) {
-                    const updateDate = new Date(u.date);
-                    const cutoff = new Date();
-                    cutoff.setDate(cutoff.getDate() - parseInt(days));
-                    if (updateDate < cutoff) return false;
-                }
-
-                return true;
-            });
-
-            // Sort
-            filteredUpdates.sort((a, b) => {
-                let comparison = 0;
-                if (sortField === 'date') {
-                    comparison = new Date(b.date) - new Date(a.date);
-                } else if (sortField === 'tool') {
-                    comparison = a.tool.localeCompare(b.tool);
-                } else if (sortField === 'version') {
-                    comparison = a.version.localeCompare(b.version);
-                }
-                return sortOrder === 'desc' ? comparison : -comparison;
-            });
-
-            renderCurrentView();
-        }
-
-        function renderCurrentView() {
-            const start = (currentPage - 1) * perPage;
-            const end = start + perPage;
-            const pageUpdates = filteredUpdates.slice(start, end);
-
-            document.querySelectorAll('.content-view').forEach(v => v.classList.remove('active'));
-            document.getElementById(`${currentView}View`).classList.add('active');
-
-            // Show/hide pagination for calendar view
-            document.getElementById('paginationContainer').style.display = 
-                currentView === 'calendar' ? 'none' : 'flex';
-
-            switch (currentView) {
-                case 'cards':
-                    renderCards(pageUpdates);
-                    break;
-                case 'table':
-                    renderTable(pageUpdates);
-                    break;
-                case 'timeline':
-                    renderTimeline(pageUpdates);
-                    break;
-                case 'calendar':
-                    renderCalendar(filteredUpdates);
-                    return; // Calendar doesn't use pagination
-            }
-
-            renderPagination();
-        }
-
-        function renderCards(updates) {
-            const grid = document.getElementById('updatesGrid');
-
-            if (updates.length === 0) {
-                grid.innerHTML = `
-                    <div class="empty-state" style="grid-column: 1 / -1;">
-                        <div class="empty-state-icon">
-                            <i data-lucide="inbox" style="width: 32px; height: 32px;"></i>
-                        </div>
-                        <h3>Nenhum update encontrado</h3>
-                        <p>Tente ajustar os filtros de busca</p>
-                    </div>
-                `;
-                lucide.createIcons();
-                return;
-            }
-
-            grid.innerHTML = updates.map(u => {
-                const date = formatDate(u.date);
-                const relativeDate = getRelativeDate(u.date);
-                const detailsLink = getDetailsLink(u);
-                const updateJson = encodeURIComponent(JSON.stringify(u));
-
-                return `
-                    <div class="update-card">
-                        <div class="update-header">
-                            <span class="tool-badge">
-                                <i data-lucide="package" style="width: 14px; height: 14px;"></i>
-                                ${escapeHtml(u.tool)}
-                            </span>
-                            <span class="date-badge" title="${date}">
-                                <i data-lucide="clock" style="width: 12px; height: 12px;"></i>
-                                ${relativeDate}
-                            </span>
-                        </div>
-                        <div class="version">${escapeHtml(u.version)}</div>
-                        ${u.description ? `<p class="description">${escapeHtml(truncate(u.description, 150))}</p>` : ''}
-                        <div class="card-footer">
-                            ${detailsLink ? `
-                                <a href="${detailsLink}" target="_blank" class="link">
-                                    Ver detalhes
-                                    <i data-lucide="external-link" style="width: 14px; height: 14px;"></i>
-                                </a>
-                            ` : '<span></span>'}
-                            <button class="btn" onclick="showDetailFromEncoded('${updateJson}')" style="padding: 0.375rem 0.75rem;">
-                                <i data-lucide="info" style="width: 14px; height: 14px;"></i>
-                            </button>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-
-            lucide.createIcons();
-        }
-
-        function renderTable(updates) {
-            const tbody = document.getElementById('tableBody');
-
-            if (updates.length === 0) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="5" style="text-align: center; padding: 3rem;">
-                            <div class="empty-state-icon" style="margin: 0 auto 1rem;">
-                                <i data-lucide="inbox" style="width: 32px; height: 32px;"></i>
-                            </div>
-                            <p style="color: var(--text-secondary);">Nenhum update encontrado</p>
-                        </td>
-                    </tr>
-                `;
-                lucide.createIcons();
-                return;
-            }
-
-            tbody.innerHTML = updates.map(u => {
-                const date = formatDate(u.date);
-                const detailsLink = getDetailsLink(u);
-                const updateJson = encodeURIComponent(JSON.stringify(u));
-
-                return `
-                    <tr>
-                        <td><span class="tool-badge">${escapeHtml(u.tool)}</span></td>
-                        <td class="table-version">${escapeHtml(u.version)}</td>
-                        <td>${date}</td>
-                        <td class="table-description">${escapeHtml(truncate(u.description || '-', 80))}</td>
-                        <td>
-                            <div style="display: flex; gap: 0.5rem;">
-                                ${detailsLink ? `
-                                    <a href="${detailsLink}" target="_blank" class="btn" style="padding: 0.375rem 0.5rem;">
-                                        <i data-lucide="external-link" style="width: 14px; height: 14px;"></i>
-                                    </a>
-                                ` : ''}
-                                <button class="btn" onclick="showDetailFromEncoded('${updateJson}')" style="padding: 0.375rem 0.5rem;">
-                                    <i data-lucide="info" style="width: 14px; height: 14px;"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                `;
-            }).join('');
-
-            lucide.createIcons();
-        }
-
-        function renderTimeline(updates) {
-            const timeline = document.getElementById('timeline');
-
-            if (updates.length === 0) {
-                timeline.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-state-icon">
-                            <i data-lucide="inbox" style="width: 32px; height: 32px;"></i>
-                        </div>
-                        <h3>Nenhum update encontrado</h3>
-                        <p>Tente ajustar os filtros de busca</p>
-                    </div>
-                `;
-                lucide.createIcons();
-                return;
-            }
-
-            timeline.innerHTML = updates.map(u => {
-                const date = formatDate(u.date);
-                const detailsLink = getDetailsLink(u);
-
-                return `
-                    <div class="timeline-item">
-                        <div class="timeline-dot"></div>
-                        <div class="timeline-date">${date}</div>
-                        <div class="timeline-content">
-                            <div class="timeline-title">${escapeHtml(u.version)}</div>
-                            <div class="timeline-tool">${escapeHtml(u.tool)}</div>
-                            ${u.description ? `<p style="margin-top: 0.5rem; font-size: 0.875rem; color: var(--text-secondary);">${escapeHtml(truncate(u.description, 200))}</p>` : ''}
-                            ${detailsLink ? `
-                                <a href="${detailsLink}" target="_blank" class="link" style="margin-top: 0.75rem; display: inline-flex;">
-                                    Ver detalhes
-                                    <i data-lucide="external-link" style="width: 14px; height: 14px;"></i>
-                                </a>
-                            ` : ''}
-                        </div>
-                    </div>
-                `;
-            }).join('');
-
-            lucide.createIcons();
-        }
-
-        function renderCalendar(updates) {
-            const calendarEl = document.getElementById('calendar');
-            
-            if (calendar) {
-                calendar.destroy();
-            }
-
-            // Generate colors for tools
-            const tools = [...new Set(updates.map(u => u.tool))];
-            const colors = ['#3b82f6', '#22c55e', '#f59e0b', '#ef4444', '#a855f7', '#ec4899', '#06b6d4', '#84cc16'];
-            const toolColors = {};
-            tools.forEach((t, i) => {
-                toolColors[t] = colors[i % colors.length];
-            });
-
-            const events = updates.map(u => ({
-                title: `${u.tool}: ${u.version}`,
-                start: u.date.split('T')[0],
-                backgroundColor: toolColors[u.tool],
-                borderColor: toolColors[u.tool],
-                extendedProps: u
-            }));
-
-            calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: 'dayGridMonth',
-                headerToolbar: {
-                    left: 'prev,next today',
-                    center: 'title',
-                    right: 'dayGridMonth,dayGridWeek,listMonth'
-                },
-                events: events,
-                eventClick: (info) => {
-                    showDetail(info.event.extendedProps);
-                },
-                eventDidMount: (info) => {
-                    tippy(info.el, {
-                        content: `<strong>${escapeHtml(info.event.extendedProps.tool)}</strong><br>${escapeHtml(info.event.extendedProps.version)}`,
-                        allowHTML: true,
-                        theme: 'custom',
-                        animation: 'shift-away'
-                    });
-                },
-                height: 'auto',
-                locale: 'pt-br',
-                buttonText: {
-                    today: 'Hoje',
-                    month: 'Mês',
-                    week: 'Semana',
-                    list: 'Lista'
-                }
-            });
-
-            calendar.render();
-        }
-
-        function renderPagination() {
-            const total = filteredUpdates.length;
-            const totalPages = Math.ceil(total / perPage);
-            const start = (currentPage - 1) * perPage + 1;
-            const end = Math.min(currentPage * perPage, total);
-
-            document.getElementById('paginationInfo').textContent = 
-                total > 0 ? `Mostrando ${start}-${end} de ${total} updates` : 'Nenhum resultado';
-
-            const pagination = document.getElementById('pagination');
-            
-            if (totalPages <= 1) {
-                pagination.innerHTML = '';
-                return;
-            }
-
-            let pages = [];
-            
-            // Previous button
-            pages.push(`
-                <button class="page-btn" onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>
-                    <i data-lucide="chevron-left" style="width: 16px; height: 16px;"></i>
-                </button>
-            `);
-
-            // Page numbers
-            const maxVisible = 5;
-            let startPage = Math.max(1, currentPage - Math.floor(maxVisible / 2));
-            let endPage = Math.min(totalPages, startPage + maxVisible - 1);
-            
-            if (endPage - startPage < maxVisible - 1) {
-                startPage = Math.max(1, endPage - maxVisible + 1);
-            }
-
-            if (startPage > 1) {
-                pages.push(`<button class="page-btn" onclick="goToPage(1)">1</button>`);
-                if (startPage > 2) {
-                    pages.push(`<span style="padding: 0 0.5rem; color: var(--text-muted);">...</span>`);
-                }
-            }
-
-            for (let i = startPage; i <= endPage; i++) {
-                pages.push(`
-                    <button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">
-                        ${i}
-                    </button>
-                `);
-            }
-
-            if (endPage < totalPages) {
-                if (endPage < totalPages - 1) {
-                    pages.push(`<span style="padding: 0 0.5rem; color: var(--text-muted);">...</span>`);
-                }
-                pages.push(`<button class="page-btn" onclick="goToPage(${totalPages})">${totalPages}</button>`);
-            }
-
-            // Next button
-            pages.push(`
-                <button class="page-btn" onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>
-                    <i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i>
-                </button>
-            `);
-
-            pagination.innerHTML = pages.join('');
-            lucide.createIcons();
-        }
-
-        function goToPage(page) {
-            const totalPages = Math.ceil(filteredUpdates.length / perPage);
-            if (page < 1 || page > totalPages) return;
-            currentPage = page;
-            renderCurrentView();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function switchView(view) {
-            currentView = view;
-            currentPage = 1;
-            renderCurrentView();
-        }
-
-        function handleSort(field) {
-            if (sortField === field) {
-                sortOrder = sortOrder === 'desc' ? 'asc' : 'desc';
-            } else {
-                sortField = field;
-                sortOrder = 'desc';
-            }
-            document.getElementById('sortField').value = sortField;
-            document.getElementById('sortOrder').value = sortOrder;
-            applyFilters();
-        }
-
-        function showDetailFromEncoded(encodedUpdate) {
-            const update = JSON.parse(decodeURIComponent(encodedUpdate));
-            showDetail(update);
-        }
-
-        function showDetail(update) {
-            const modal = document.getElementById('detailModal');
-            const body = document.getElementById('modalBody');
-            const date = formatDate(update.date);
-            const detailsLink = getDetailsLink(update);
-
-            body.innerHTML = `
-                <div class="detail-row">
-                    <span class="detail-label">Ferramenta</span>
-                    <span class="detail-value"><span class="tool-badge">${escapeHtml(update.tool)}</span></span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Versão</span>
-                    <span class="detail-value" style="font-weight: 600;">${escapeHtml(update.version)}</span>
-                </div>
-                <div class="detail-row">
-                    <span class="detail-label">Data</span>
-                    <span class="detail-value">${date}</span>
-                </div>
-                ${update.description ? `
-                    <div class="detail-row" style="flex-direction: column; gap: 0.5rem;">
-                        <span class="detail-label">Descrição</span>
-                        <span class="detail-value">${escapeHtml(update.description)}</span>
-                    </div>
-                ` : ''}
-                ${detailsLink ? `
-                    <div style="margin-top: 1rem;">
-                        <a href="${detailsLink}" target="_blank" class="btn btn-primary" style="width: 100%; justify-content: center;">
-                            <i data-lucide="external-link" style="width: 16px; height: 16px;"></i>
-                            Abrir página oficial
-                        </a>
-                    </div>
-                ` : ''}
-            `;
-
-            modal.classList.add('active');
-            lucide.createIcons();
-        }
-
-        function closeModal() {
-            document.getElementById('detailModal').classList.remove('active');
-        }
-
-        function refreshData() {
-            currentPage = 1;
-            loadAllUpdates();
-        }
-
-        function exportData() {
-            const data = filteredUpdates.map(u => ({
-                tool: u.tool,
-                version: u.version,
-                date: u.date,
-                description: u.description || '',
-                link: u.link || ''
-            }));
-
-            const csv = [
-                ['Ferramenta', 'Versão', 'Data', 'Descrição', 'Link'].join(','),
-                ...data.map(row => [
-                    `"${row.tool}"`,
-                    `"${row.version}"`,
-                    `"${row.date}"`,
-                    `"${(row.description || '').replace(/"/g, '""')}"`,
-                    `"${row.link}"`
-                ].join(','))
-            ].join('\n');
-
-            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = `afrika-updates-${new Date().toISOString().split('T')[0]}.csv`;
-            link.click();
-        }
-
-        // Helpers
-        function formatDate(dateStr) {
-            return new Date(dateStr).toLocaleDateString('pt-BR', {
-                day: '2-digit',
-                month: 'long',
-                year: 'numeric'
-            });
-        }
-
-        function getRelativeDate(dateStr) {
-            const date = new Date(dateStr);
-            const now = new Date();
-            const diff = Math.floor((now - date) / (1000 * 60 * 60 * 24));
-            
-            if (diff === 0) return 'Hoje';
-            if (diff === 1) return 'Ontem';
-            if (diff < 7) return `${diff} dias atrás`;
-            if (diff < 30) return `${Math.floor(diff / 7)} semanas atrás`;
-            if (diff < 365) return `${Math.floor(diff / 30)} meses atrás`;
-            return `${Math.floor(diff / 365)} anos atrás`;
-        }
-
-        function getDetailsLink(update) {
-            if (!update.link) return null;
-            const dateObj = new Date(update.date);
-            const dateEnglish = dateObj.toLocaleDateString('en-US', {
-                month: 'long',
-                day: 'numeric',
-                year: 'numeric'
-            });
-            return `${update.link}#:~:text=${encodeURIComponent(dateEnglish)}`;
-        }
-
-        function truncate(str, length) {
-            if (!str) return '';
-            return str.length > length ? str.substring(0, length) + '...' : str;
-        }
-
-        function escapeHtml(text) {
-            if (!text) return '';
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        function showLoading(show) {
-            document.getElementById('loadingOverlay').classList.toggle('active', show);
-        }
-
-        function showError(message) {
-            document.getElementById('errorMessage').textContent = message;
-            document.getElementById('errorBanner').classList.add('visible');
-        }
-
-        function hideError() {
-            document.getElementById('errorBanner').classList.remove('visible');
-        }
-
-        // API Documentation Functions
-        function toggleEndpoint(id) {
-            const endpoint = document.getElementById(id);
-            endpoint.classList.toggle('open');
-            lucide.createIcons();
-        }
-
-        function copyApiUrl() {
-            const url = document.getElementById('apiBaseUrl').textContent;
-            navigator.clipboard.writeText(url).then(() => {
-                const btn = document.querySelector('.api-copy-btn');
-                const originalText = btn.innerHTML;
-                btn.innerHTML = '<i data-lucide="check" style="width: 14px; height: 14px;"></i> Copiado!';
-                lucide.createIcons();
-                setTimeout(() => {
-                    btn.innerHTML = originalText;
-                    lucide.createIcons();
-                }, 2000);
-            });
-        }
-
-        function tryApiEndpoint(path) {
-            window.open(API_URL + path, '_blank');
-        }
     </script>
 </body>
 </html>
