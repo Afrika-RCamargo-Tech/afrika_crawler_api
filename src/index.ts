@@ -118,7 +118,15 @@ async function run() {
       // Exibir linha do update
       console.log(`│   ├── [${numberStr}] ${statusIcon} ${updateDate} - ${truncated}`);
       if (update.link) {
-        console.log(`│   │       🔗 ${update.link}`);
+        // Adicionar text fragment highlight com a data
+        const dateForHighlight = new Date(update.date).toLocaleDateString('en-US', {
+          month: 'long',
+          day: 'numeric',
+          year: 'numeric'
+        });
+        const encodedDate = encodeURIComponent(dateForHighlight);
+        const linkWithHighlight = `${update.link}#:~:text=${encodedDate}`;
+        console.log(`│   │       🔗 ${linkWithHighlight}`);
       }
     }
 
