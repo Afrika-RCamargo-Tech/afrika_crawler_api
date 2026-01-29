@@ -54,7 +54,7 @@ async function run() {
 
       // Extrai categoria do version
       const categoryMatch = update.version.match(/^([^-]+) -/);
-      const category = categoryMatch ? categoryMatch[1].trim() : 'General';
+      const category = categoryMatch?.[1]?.trim() || 'General';
       const versionOnly = update.version.replace(/^[^-]+ - /, '');
 
       // Se mudou de categoria, exibe header da nova categoria

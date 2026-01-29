@@ -58,6 +58,13 @@ export class VeracodeFetcher implements IUpdateFetcher {
         if (!dateMatch) return;
 
         const [, month, day, year] = dateMatch;
+        
+        // Validar que os valores foram extraídos
+        if (!month || !day || !year) {
+          console.warn(`[${this.toolName}] Data incompleta extraída: ${dateText}`);
+          return;
+        }
+        
         const monthMap: { [key: string]: number } = {
           'January': 0, 'February': 1, 'March': 2, 'April': 3, 'May': 4, 'June': 5,
           'July': 6, 'August': 7, 'September': 8, 'October': 9, 'November': 10, 'December': 11,
