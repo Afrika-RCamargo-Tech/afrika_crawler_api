@@ -46,11 +46,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       query.tool = { $regex: new RegExp(tool as string, 'i') };
     }
 
-    const updates = await UpdateModel.find(query)
+    let queryBuilder = UpdateModel.find(query)
       .sort({ date: -1 })
-      .limit(limitNum)
-      .select('-_id -__v -uniqueId')
-      .lean();
+      .select('-_id -__v -uniqueId');
+    
+    // Se limit > 0, aplica o limite. Se limit = 0, retorna tudo
+    if (limitNum > 0) {
+      queryBuilder = queryBuilder.limit(limitNum);
+    }
+
+    const updates = await queryBuilder.lean();
 
     return res.status(200).json(updates);
   } catch (error: any) {
