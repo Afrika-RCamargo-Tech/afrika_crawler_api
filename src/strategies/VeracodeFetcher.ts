@@ -72,8 +72,9 @@ export class VeracodeFetcher implements IUpdateFetcher {
           return;
         }
         
-        // Criar data em UTC para garantir consistência independente do timezone
-        const date = new Date(Date.UTC(parseInt(year), monthIndex, parseInt(day)));
+        // Criar data ao meio-dia UTC para evitar problemas de timezone
+        // Assim o dia permanece correto em qualquer timezone do mundo
+        const date = new Date(Date.UTC(parseInt(year), monthIndex, parseInt(day), 12, 0, 0));
         
         // Validar se a data é válida
         if (isNaN(date.getTime())) {
