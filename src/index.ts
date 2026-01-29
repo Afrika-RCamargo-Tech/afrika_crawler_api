@@ -10,24 +10,27 @@ const strategies = [
   // new SdElementsFetcher()
 ];
 
-interface UpdateResult {
-  type: 'new' | 'updated' | 'skipped';
-  category: string;
-  version: string;
-}
-
 async function run() {
   await connectToDatabase();
 
   console.log("🚀 Iniciando Crawler...\n");
 
   for (const strategy of strategies) {
+    console.log(`╔════════════════════════════════════════════════════════════════╗`);
+    console.log(`║  📦 ${strategy.toolName.padEnd(58)}║`);
+    console.log(`╚════════════════════════════════════════════════════════════════╝\n`);
+
     const updates = await strategy.fetchUpdates();
     
-    // Agrupar resultados por categoria para exibição organizada
-    const results: { [category: string]: UpdateResult[] } = {};
     let newCount = 0;
     let updatedCount = 0;
+    let unchangedCount = 0;
+    
+    // Agrupar por categoria para exibição hierárquica
+    let currentCategory = '';
+    let categoryNewCount = 0;
+    let categoryUpdatedCount = 0;
+    let itemsInCategory = 0;
 
     for (const update of updates) {
       // Cria ID único baseado em hash de tool + date + version
@@ -36,7 +39,7 @@ async function run() {
       const uniqueId = createHash('sha256')
         .update(hashInput)
         .digest('hex')
-        .substring(0, 16); // Usa apenas os primeiros 16 caracteres do hash
+        .substring(0, 16);
 
       // Verifica se já existe
       const existing = await UpdateModel.findOne({ uniqueId });
@@ -47,16 +50,28 @@ async function run() {
         uniqueId: uniqueId
       };
 
-      // Extrai categoria do version (ex: "CLI updates - Veracode CLI v2.44.0" -> "CLI updates")
+      // Extrai categoria do version
       const categoryMatch = update.version.match(/^([^-]+) -/);
       const category = categoryMatch ? categoryMatch[1].trim() : 'General';
       const versionOnly = update.version.replace(/^[^-]+ - /, '');
 
-      if (!results[category]) {
-        results[category] = [];
+      // Se mudou de categoria, exibe header da nova categoria
+      if (category !== currentCategory) {
+        // Se tinha categoria anterior, fecha ela
+        if (currentCategory) {
+          console.log('');
+        }
+        
+        currentCategory = category;
+        categoryNewCount = 0;
+        categoryUpdatedCount = 0;
+        itemsInCategory = 0;
+        console.log(`├── 📂 ${category}`);
       }
 
-      // Só atualiza se houver mudanças no conteúdo
+      let updateType: 'new' | 'updated' | 'skipped' = 'skipped';
+
+      // Processa o update
       if (existing) {
         const hasChanges = 
           existing.description !== newData.description ||
@@ -69,70 +84,38 @@ async function run() {
             newData,
             { new: true }
           );
-          results[category].push({ type: 'updated', category, version: versionOnly });
+          updateType = 'updated';
           updatedCount++;
+          categoryUpdatedCount++;
         } else {
-          results[category].push({ type: 'skipped', category, version: versionOnly });
+          unchangedCount++;
         }
       } else {
-        // Novo registro
         await UpdateModel.create(newData);
-        results[category].push({ type: 'new', category, version: versionOnly });
+        updateType = 'new';
         newCount++;
+        categoryNewCount++;
+      }
+
+      // Exibir apenas se for novo ou atualizado
+      if (updateType !== 'skipped') {
+        itemsInCategory++;
+        const icon = updateType === 'new' ? '✨' : '📝';
+        const truncated = versionOnly.length > 55 
+          ? versionOnly.substring(0, 52) + '...' 
+          : versionOnly;
+        
+        // Limitar a 5 itens por categoria para não poluir
+        if (itemsInCategory <= 5) {
+          console.log(`│   ├── ${icon} ${truncated}`);
+        } else if (itemsInCategory === 6) {
+          console.log(`│   └── ... (showing first 5, ${categoryNewCount + categoryUpdatedCount - 5} more in this category)`);
+        }
       }
     }
 
-    // Exibir resultados de forma organizada e profissional
-    console.log(`\n╔════════════════════════════════════════════════════════════════╗`);
-    console.log(`║  📦 ${strategy.toolName.padEnd(58)}║`);
-    console.log(`╚════════════════════════════════════════════════════════════════╝\n`);
-
-    const categories = Object.keys(results).sort();
-    const totalCategories = categories.length;
-
-    categories.forEach((category, catIndex) => {
-      const isLastCategory = catIndex === totalCategories - 1;
-      const categoryPrefix = isLastCategory ? '└──' : '├──';
-      const itemPrefix = isLastCategory ? '    ' : '│   ';
-      
-      const categoryUpdates = results[category];
-      const newInCategory = categoryUpdates.filter(u => u.type === 'new').length;
-      const updatedInCategory = categoryUpdates.filter(u => u.type === 'updated').length;
-      
-      let categoryLabel = `📂 ${category}`;
-      if (newInCategory > 0 || updatedInCategory > 0) {
-        const badges = [];
-        if (newInCategory > 0) badges.push(`✨ ${newInCategory} new`);
-        if (updatedInCategory > 0) badges.push(`📝 ${updatedInCategory} updated`);
-        categoryLabel += ` (${badges.join(', ')})`;
-      }
-      
-      console.log(`${categoryPrefix} ${categoryLabel}`);
-
-      // Mostrar apenas os novos e atualizados (não os skipped)
-      const relevantUpdates = categoryUpdates.filter(u => u.type !== 'skipped');
-      const displayLimit = 5; // Limitar exibição para não poluir
-      const updatesToShow = relevantUpdates.slice(0, displayLimit);
-      const remaining = relevantUpdates.length - displayLimit;
-
-      updatesToShow.forEach((result, idx) => {
-        const isLast = idx === updatesToShow.length - 1 && remaining <= 0;
-        const updatePrefix = isLast ? '└──' : '├──';
-        const icon = result.type === 'new' ? '✨' : '📝';
-        const truncated = result.version.length > 55 
-          ? result.version.substring(0, 52) + '...' 
-          : result.version;
-        console.log(`${itemPrefix}${updatePrefix} ${icon} ${truncated}`);
-      });
-
-      if (remaining > 0) {
-        console.log(`${itemPrefix}└── ... and ${remaining} more`);
-      }
-
-      console.log('');
-    });
-
-    console.log(`📊 Summary: ${newCount} new, ${updatedCount} updated, ${updates.length - newCount - updatedCount} unchanged\n`);
+    console.log('');
+    console.log(`📊 Summary: ${newCount} new, ${updatedCount} updated, ${unchangedCount} unchanged\n`);
   }
 
   console.log("╔════════════════════════════════════════════════════════════════╗");
