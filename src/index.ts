@@ -102,6 +102,13 @@ async function run() {
       // Formatar número com zeros à esquerda
       const numberStr = globalIndex.toString().padStart(numDigits, '0');
       
+      // Formatar data
+      const updateDate = new Date(update.date).toLocaleDateString('en-US', {
+        month: 'short',
+        day: '2-digit',
+        year: 'numeric'
+      });
+      
       // Truncar versão se muito longa
       const maxLength = 50;
       const truncated = versionOnly.length > maxLength 
@@ -109,7 +116,9 @@ async function run() {
         : versionOnly;
       
       // Exibir linha do update
-      console.log(`│   ├── [${numberStr}] ${statusIcon} ${truncated}`);
+      console.log(`│   ├── [${numberStr}] ${statusIcon} ${updateDate} - ${truncated}`);
+      if (update.link) {
+        console.log(`│   │       🔗 ${update.link}`);
     }
 
     console.log('│');
