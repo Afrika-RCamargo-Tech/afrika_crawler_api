@@ -60,11 +60,26 @@ export class VeracodeFetcher implements IUpdateFetcher {
         const [, month, day, year] = dateMatch;
         const monthMap: { [key: string]: number } = {
           'January': 0, 'February': 1, 'March': 2, 'April': 3, 'May': 4, 'June': 5,
-          'July': 6, 'August': 7, 'September': 8, 'October': 9, 'November': 10, 'December': 11
+          'July': 6, 'August': 7, 'September': 8, 'October': 9, 'November': 10, 'December': 11,
+          // Abreviações também
+          'Jan': 0, 'Feb': 1, 'Mar': 2, 'Apr': 3, 'Jun': 5,
+          'Jul': 6, 'Aug': 7, 'Sep': 8, 'Sept': 8, 'Oct': 9, 'Nov': 10, 'Dec': 11
         };
         
+        const monthIndex = monthMap[month];
+        if (monthIndex === undefined) {
+          console.warn(`[${this.toolName}] Mês não reconhecido: ${month}`);
+          return;
+        }
+        
         // Criar data em UTC para garantir consistência independente do timezone
-        const date = new Date(Date.UTC(parseInt(year), monthMap[month], parseInt(day)));
+        const date = new Date(Date.UTC(parseInt(year), monthIndex, parseInt(day)));
+        
+        // Validar se a data é válida
+        if (isNaN(date.getTime())) {
+          console.warn(`[${this.toolName}] Data inválida: ${dateText}`);
+          return;
+        }
         
         // Pegar todos os headings h3 que vêm depois dessa data até o próximo h2
         let currentElement = $(dateElement).next();
