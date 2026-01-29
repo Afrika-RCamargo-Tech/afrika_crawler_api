@@ -1,14 +1,22 @@
 import { connectToDatabase, disconnectDatabase } from './database';
 import { VeracodeFetcher } from './strategies/VeracodeFetcher';
+import { VeracodeRssFetcher } from './strategies/VeracodeRssFetcher';
 import { UpdateModel } from './models/Update';
 import { createHash } from 'crypto';
 
+// Escolher o fetcher baseado na variável de ambiente
+// USE_RSS=true usa o fetcher híbrido (RSS + crawling) - mais rápido e auto-atualizável
+// USE_RSS=false ou não definido usa o crawler original (mais lento, URLs hardcoded)
+const useRss = process.env.USE_RSS === 'true';
+
 // Lista de estratégias ativas
 const strategies = [
-  new VeracodeFetcher(),
+  useRss ? new VeracodeRssFetcher() : new VeracodeFetcher(),
   // new SaltFetcher(), 
   // new SdElementsFetcher()
 ];
+
+console.log(`📡 Modo: ${useRss ? 'RSS Híbrido (recomendado)' : 'Crawler Original'}\n`);
 
 async function run() {
   await connectToDatabase();
