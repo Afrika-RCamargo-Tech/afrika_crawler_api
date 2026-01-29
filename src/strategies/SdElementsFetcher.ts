@@ -44,10 +44,13 @@ export class SdElementsFetcher implements IUpdateFetcher {
   private async fetchUpdatesFromPage(url: string): Promise<SimpleUpdateData[]> {
     const { data } = await axios.get(url, {
       headers: { 
-        'User-Agent': 'Afrika-Crawler/1.0',
-        'Accept': 'text/html,application/xhtml+xml'
-      }
+        'User-Agent': 'Mozilla/5.0 (compatible; Afrika-Crawler/1.0)',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8'
+      },
+      timeout: 60000 // 60 segundos de timeout
     });
+    
+    console.log(`[${this.toolName}] Página carregada: ${url} (${data.length} bytes)`);
     
     const $ = cheerio.load(data);
     const updates: SimpleUpdateData[] = [];
