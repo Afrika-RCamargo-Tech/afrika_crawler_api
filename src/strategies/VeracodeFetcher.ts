@@ -57,7 +57,9 @@ export class VeracodeFetcher implements IUpdateFetcher {
         const dateMatch = dateText.match(/^([A-Z][a-z]+\s+\d{1,2},\s+\d{4})/);
         if (!dateMatch || !dateMatch[1]) return;
 
-        const date = new Date(dateMatch[1]);
+        // Parsear a data mantendo o timezone local (meio-dia para evitar problemas de timezone)
+        const parsedDate = new Date(dateMatch[1] + ' 12:00:00 GMT-0000');
+        const date = new Date(parsedDate.getUTCFullYear(), parsedDate.getUTCMonth(), parsedDate.getUTCDate());
         
         // Pegar todos os headings h3 que vêm depois dessa data até o próximo h2
         let currentElement = $(dateElement).next();
