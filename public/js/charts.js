@@ -3,10 +3,19 @@
  * Handle Chart.js charts for analytics
  */
 
-class ChartManager {
+class ChartManagerClass {
     constructor() {
         this.charts = {};
-        this.colors = ColorUtils.toolColors;
+        this.colors = [
+            '#6366f1', '#22c55e', '#f59e0b', '#ef4444', '#a855f7',
+            '#ec4899', '#06b6d4', '#84cc16', '#f97316', '#8b5cf6'
+        ];
+    }
+    
+    init() {
+        if (typeof ColorUtils !== 'undefined') {
+            this.colors = ColorUtils.toolColors;
+        }
         this.setupChartDefaults();
     }
 
@@ -281,9 +290,16 @@ class ChartManager {
 }
 
 // Create global instance
-window.ChartManager = new ChartManager();
+window.ChartManager = new ChartManagerClass();
+
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+    ChartManager.init();
+});
 
 // Update charts on theme change
 document.addEventListener('themechange', () => {
-    ChartManager.updateTheme();
+    if (ChartManager && ChartManager.updateTheme) {
+        ChartManager.updateTheme();
+    }
 });

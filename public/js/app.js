@@ -435,6 +435,17 @@ const App = {
     },
 
     renderCharts(updates) {
+        // Check if Chart.js and ChartManager are available
+        if (typeof Chart === 'undefined') {
+            console.warn('Chart.js not loaded');
+            return;
+        }
+        
+        if (typeof ChartManager === 'undefined' || !ChartManager.createTimelineChart) {
+            console.warn('ChartManager not ready');
+            return;
+        }
+
         // Timeline chart
         const timelineCanvas = document.getElementById('timelineChart');
         if (timelineCanvas) {
