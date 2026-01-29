@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "dev": "tsx src/index.ts",
-    "start": "node --loader ts-node/esm src/index.ts"
+    "start": "node --loader ts-node/esm src/index.ts",
+    "api": "bun run --watch src/api.ts"
   },
   "devDependencies": {
     "@types/bun": "latest",
@@ -17,9 +18,11 @@
     "typescript": "^5"
   },
   "dependencies": {
+    "@vercel/node": "^5.5.28",
     "axios": "^1.13.4",
     "cheerio": "^1.2.0",
     "dotenv": "^17.2.3",
+    "hono": "^4.11.7",
     "mongoose": "^9.1.5"
   }
 }

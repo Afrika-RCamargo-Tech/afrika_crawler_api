@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Afrika Crawler - Security Updates</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .controls {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .control-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: auto;
+        }
+
+        button:hover {
+            background: #5568d3;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .updates-grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .update-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .update-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 12px rgba(0,0,0,0.15);
+        }
+
+        .update-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 15px;
+        }
+
+        .tool-badge {
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .date {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .version {
+            font-size: 1.3em;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .link {
+            display: inline-block;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .link:hover {
+            color: #5568d3;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px;
+            color: white;
+            font-size: 1.2em;
+        }
+
+        .error {
+            background: #ff6b6b;
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px;
+            background: white;
+            border-radius: 12px;
+            color: #666;
+        }
+
+        .empty-state h3 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .spinner {
+            border: 4px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 Afrika Crawler</h1>
+            <p class="subtitle">Security Tools Updates Monitor</p>
+        </header>
+
+        <div class="controls">
+            <div class="control-group">
+                <label for="toolFilter">Filtrar por Ferramenta</label>
+                <input type="text" id="toolFilter" placeholder="Ex: Veracode, SonarQube...">
+            </div>
+            <div class="control-group">
+                <label for="limitSelect">Limite de Resultados</label>
+                <select id="limitSelect">
+                    <option value="10">10 updates</option>
+                    <option value="20" selected>20 updates</option>
+                    <option value="50">50 updates</option>
+                    <option value="100">100 updates</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label>&nbsp;</label>
+                <button onclick="loadUpdates()">🔍 Buscar</button>
+            </div>
+        </div>
+
+        <div class="stats" id="stats"></div>
+        
+        <div id="error"></div>
+        <div id="loading" class="loading" style="display: none;">
+            <div class="spinner"></div>
+            <p style="margin-top: 20px;">Carregando updates...</p>
+        </div>
+        <div class="updates-grid" id="updatesGrid"></div>
+    </div>
+
+    <script>
+        const API_URL = 'https://afrikacrawlerapi.vercel.app/api';
+
+        async function loadUpdates() {
+            const tool = document.getElementById('toolFilter').value;
+            const limit = document.getElementById('limitSelect').value;
+            const loading = document.getElementById('loading');
+            const error = document.getElementById('error');
+            const updatesGrid = document.getElementById('updatesGrid');
+            const stats = document.getElementById('stats');
+
+            loading.style.display = 'block';
+            error.innerHTML = '';
+            updatesGrid.innerHTML = '';
+            stats.innerHTML = '';
+
+            try {
+                const params = new URLSearchParams({ limit });
+                if (tool) params.append('tool', tool);
+
+                const response = await fetch(`${API_URL}/updates?${params}`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const updates = await response.json();
+                
+                loading.style.display = 'none';
+
+                if (updates.error) {
+                    throw new Error(updates.error);
+                }
+
+                if (updates.length === 0) {
+                    updatesGrid.innerHTML = `
+                        <div class="empty-state">
+                            <h3>😔 Nenhum update encontrado</h3>
+                            <p>Tente ajustar os filtros ou aguarde o crawler coletar novos dados.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Estatísticas
+                const toolsCount = [...new Set(updates.map(u => u.tool))].length;
+                const mostRecent = new Date(updates[0].date);
+                const daysSinceLastUpdate = Math.floor((Date.now() - mostRecent) / (1000 * 60 * 60 * 24));
+
+                stats.innerHTML = `
+                    <div class="stat-card">
+                        <div class="stat-number">${updates.length}</div>
+                        <div class="stat-label">Total de Updates</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">${toolsCount}</div>
+                        <div class="stat-label">Ferramentas</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">${daysSinceLastUpdate}</div>
+                        <div class="stat-label">Dias desde último update</div>
+                    </div>
+                `;
+
+                // Renderizar updates
+                updates.forEach(update => {
+                    const card = document.createElement('div');
+                    card.className = 'update-card';
+                    
+                    const dateObj = new Date(update.date);
+                    const date = dateObj.toLocaleDateString('pt-BR', {
+                        day: '2-digit',
+                        month: 'long',
+                        year: 'numeric'
+                    });
+
+                    // Criar link com highlight automático na data exata
+                    let detailsLink = update.link;
+                    if (update.link) {
+                        // Formata a data no padrão "January 28, 2026" para highlight
+                        const dateEnglish = dateObj.toLocaleDateString('en-US', {
+                            month: 'long',
+                            day: 'numeric',
+                            year: 'numeric'
+                        });
+                        const encodedDate = encodeURIComponent(dateEnglish);
+                        detailsLink = `${update.link}#:~:text=${encodedDate}`;
+                    }
+
+                    card.innerHTML = `
+                        <div class="update-header">
+                            <span class="tool-badge">${update.tool}</span>
+                            <span class="date">${date}</span>
+                        </div>
+                        <div class="version">${update.version}</div>
+                        ${update.description ? `<div class="description">${update.description}</div>` : ''}
+                        ${detailsLink ? `<a href="${detailsLink}" target="_blank" class="link">📄 Ver detalhes →</a>` : ''}
+                    `;
+                    
+                    updatesGrid.appendChild(card);
+                });
+
+            } catch (err) {
+                loading.style.display = 'none';
+                error.innerHTML = `
+                    <div class="error">
+                        <strong>❌ Erro ao carregar updates:</strong><br>
+                        ${err.message}
+                    </div>
+                `;
+            }
+        }
+
+        // Carregar ao iniciar
+        window.addEventListener('DOMContentLoaded', loadUpdates);
+
+        // Enter para buscar
+        document.getElementById('toolFilter').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') loadUpdates();
+        });
+    </script>
+</body>
+</html>
