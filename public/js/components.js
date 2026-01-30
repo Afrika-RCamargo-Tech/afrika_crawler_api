@@ -236,42 +236,32 @@ const Components = {
         const detailsLink = StringUtils.generateDetailsLink(update);
 
         return `
+            <div class="detail-hero">
+                <div class="detail-hero-badge">
+                    <span class="tool-badge tool-badge-lg">${StringUtils.escapeHtml(update.tool)}</span>
+                </div>
+                <div class="detail-hero-version">
+                    <span class="version-label">Versão</span>
+                    <span class="version-number">${StringUtils.escapeHtml(update.version)}</span>
+                </div>
+            </div>
+            
             <div class="detail-grid">
                 <div class="detail-item">
                     <span class="detail-label">
-                        <i data-lucide="box" style="width: 14px; height: 14px;"></i>
-                        Ferramenta
-                    </span>
-                    <span class="detail-value">
-                        <span class="tool-badge">${StringUtils.escapeHtml(update.tool)}</span>
-                    </span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">
-                        <i data-lucide="tag" style="width: 14px; height: 14px;"></i>
-                        Versão
-                    </span>
-                    <span class="detail-value" style="font-weight: 600;">
-                        ${StringUtils.escapeHtml(update.version)}
-                    </span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">
                         <i data-lucide="calendar" style="width: 14px; height: 14px;"></i>
-                        Data
+                        Data de Lançamento
                     </span>
                     <span class="detail-value">
                         ${date}
-                        <span style="color: var(--text-muted); font-size: 0.875rem;">
-                            (${relativeDate})
-                        </span>
+                        <span class="detail-relative-date">${relativeDate}</span>
                     </span>
                 </div>
                 ${update.description ? `
                     <div class="detail-item detail-full">
                         <span class="detail-label">
                             <i data-lucide="file-text" style="width: 14px; height: 14px;"></i>
-                            Descrição
+                            Notas da Versão
                         </span>
                         <p class="detail-description">
                             ${StringUtils.escapeHtml(update.description)}
@@ -281,9 +271,9 @@ const Components = {
             </div>
             ${detailsLink ? `
                 <div class="modal-action">
-                    <a href="${detailsLink}" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="width: 100%;">
-                        <i data-lucide="external-link" style="width: 16px; height: 16px;"></i>
-                        Abrir página oficial
+                    <a href="${detailsLink}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-glow">
+                        <i data-lucide="external-link" style="width: 18px; height: 18px;"></i>
+                        Ver documentação oficial
                     </a>
                 </div>
             ` : ''}
@@ -335,15 +325,68 @@ componentStyles.textContent = `
         color: var(--text-muted);
     }
     
+    .detail-hero {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 32px 20px;
+        margin: -20px -24px 24px -24px;
+        background: linear-gradient(135deg, var(--color-primary-alpha) 0%, transparent 100%);
+        border-bottom: 1px solid var(--border-color);
+        border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+        text-align: center;
+    }
+    
+    .detail-hero-badge {
+        margin-bottom: 16px;
+    }
+    
+    .tool-badge-lg {
+        font-size: 0.9375rem;
+        padding: 10px 20px;
+        border-radius: 999px;
+    }
+    
+    .detail-hero-version {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+    
+    .version-label {
+        font-size: 0.6875rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--text-muted);
+    }
+    
+    .version-number {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        letter-spacing: -0.02em;
+    }
+    
     .detail-grid {
         display: grid;
-        gap: 16px;
+        gap: 20px;
     }
     
     .detail-item {
         display: flex;
         flex-direction: column;
-        gap: 6px;
+        gap: 8px;
+        padding: 16px;
+        background: var(--bg-tertiary);
+        border-radius: var(--border-radius-md);
+        border: 1px solid var(--border-color);
+        transition: all var(--transition-fast);
+    }
+    
+    .detail-item:hover {
+        border-color: var(--border-hover);
     }
     
     .detail-full {
@@ -354,29 +397,59 @@ componentStyles.textContent = `
         display: flex;
         align-items: center;
         gap: 8px;
-        font-size: 0.75rem;
-        font-weight: 600;
+        font-size: 0.6875rem;
+        font-weight: 700;
         text-transform: uppercase;
-        letter-spacing: 0.05em;
-        color: var(--text-muted);
+        letter-spacing: 0.08em;
+        color: var(--color-primary);
     }
     
     .detail-value {
-        font-size: 0.9375rem;
+        font-size: 1rem;
+        font-weight: 500;
         color: var(--text-primary);
+        line-height: 1.5;
+    }
+    
+    .detail-relative-date {
+        display: inline-block;
+        margin-left: 8px;
+        padding: 2px 8px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        color: var(--text-muted);
+        background: var(--bg-secondary);
+        border-radius: var(--border-radius-sm);
     }
     
     .detail-description {
         font-size: 0.9375rem;
-        line-height: 1.7;
+        line-height: 1.8;
         color: var(--text-secondary);
         white-space: pre-wrap;
+        margin: 0;
     }
     
     .modal-action {
         margin-top: 24px;
-        padding-top: 20px;
-        border-top: 1px solid var(--border-color);
+    }
+    
+    .modal-action .btn {
+        width: 100%;
+        padding: 14px 24px;
+        font-size: 0.9375rem;
+        font-weight: 600;
+        justify-content: center;
+    }
+    
+    .btn-glow {
+        box-shadow: 0 4px 14px -3px var(--color-primary-alpha);
+        transition: all var(--transition-normal);
+    }
+    
+    .btn-glow:hover {
+        box-shadow: 0 6px 20px -3px var(--color-primary-alpha);
+        transform: translateY(-1px);
     }
     
     .skeleton-card {

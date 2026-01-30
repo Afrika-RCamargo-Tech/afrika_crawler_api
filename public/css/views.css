@@ -522,6 +522,286 @@
     border-radius: var(--border-radius-sm);
 }
 
+/* ===== Calendar List View Customization ===== */
+
+/* Container principal da lista */
+.fc-list {
+    border: none !important;
+    border-radius: var(--border-radius-xl) !important;
+    overflow: hidden;
+}
+
+/* Esconder cabeçalho de tabela desnecessário */
+.fc-list-table thead {
+    display: none;
+}
+
+/* === Header do Dia === */
+.fc-list-day {
+    position: relative;
+}
+
+.fc-list-day th {
+    background: var(--bg-tertiary) !important;
+    color: var(--text-primary) !important;
+    padding: var(--space-3) var(--space-5) !important;
+    border: 1px solid var(--border-color) !important;
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--border-radius-md) !important;
+}
+
+.fc-list-day th::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.02) 50%, transparent 100%);
+    pointer-events: none;
+}
+
+.fc-list-day-cushion {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-1) 0 !important;
+    background: transparent !important;
+    position: relative;
+    z-index: 1;
+}
+
+/* Ícone de calendário antes da data */
+.fc-list-day-cushion::before {
+    content: '';
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    margin-right: var(--space-2);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236366f1' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z'/%3E%3C/svg%3E");
+    background-size: contain;
+    flex-shrink: 0;
+    opacity: 1;
+}
+
+/* Data principal */
+.fc-list-day-text {
+    font-weight: var(--font-bold) !important;
+    font-size: var(--text-base) !important;
+    text-transform: capitalize;
+    letter-spacing: 0.02em;
+}
+
+/* Dia da semana */
+.fc-list-day-side-text {
+    font-weight: var(--font-medium) !important;
+    font-size: var(--text-sm) !important;
+    opacity: 1;
+    text-transform: capitalize;
+    background: var(--color-primary-light);
+    color: var(--color-primary-dark) !important;
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--border-radius-full);
+}
+
+/* === Linhas de Evento === */
+.fc-list-event {
+    transition: all var(--transition-base);
+    position: relative;
+    cursor: pointer;
+}
+
+.fc-list-event:hover {
+    transform: translateX(4px);
+}
+
+.fc-list-event:hover td {
+    background: var(--bg-tertiary) !important;
+}
+
+.fc-list-event td {
+    background: var(--bg-primary) !important;
+    color: var(--text-primary) !important;
+    padding: var(--space-3) var(--space-4) !important;
+    border-bottom: 1px solid var(--border-color) !important;
+    transition: all var(--transition-base);
+    vertical-align: middle !important;
+}
+
+.fc-list-event:last-child td {
+    border-bottom: none !important;
+}
+
+/* === Célula de Horário (all-day) === */
+.fc-list-event-time {
+    font-size: 10px !important;
+    font-weight: var(--font-bold);
+    color: var(--text-muted) !important;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+    padding-right: var(--space-2) !important;
+    min-width: 60px;
+}
+
+/* === Marcador colorido do evento === */
+.fc-list-event-graphic {
+    padding: 0 var(--space-3) !important;
+    display: table-cell !important;
+    vertical-align: middle !important;
+    text-align: center;
+    width: 30px;
+}
+
+.fc-list-event-dot {
+    display: inline-block;
+    width: 10px !important;
+    height: 10px !important;
+    border-radius: 50% !important;
+    border-width: 5px !important;
+    border-style: solid !important;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    transition: all var(--transition-fast);
+}
+
+.fc-list-event:hover .fc-list-event-dot {
+    transform: scale(1.3);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2), 0 0 0 4px var(--bg-tertiary);
+}
+
+/* === Título do Evento === */
+.fc-list-event-title {
+    font-weight: var(--font-medium) !important;
+    font-size: var(--text-sm) !important;
+    color: var(--text-primary) !important;
+    line-height: var(--line-height-relaxed) !important;
+    padding-left: var(--space-2) !important;
+}
+
+.fc-list-event-title a {
+    color: inherit !important;
+    text-decoration: none !important;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+/* Adicionar seta indicativa de link */
+.fc-list-event-title a::after {
+    content: '';
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14'/%3E%3C/svg%3E");
+    background-size: contain;
+    opacity: 0;
+    transform: translateX(-4px);
+    transition: all var(--transition-fast);
+    flex-shrink: 0;
+}
+
+.fc-list-event:hover .fc-list-event-title a::after {
+    opacity: 0.6;
+    transform: translateX(0);
+}
+
+/* === Mensagem de "Sem eventos" === */
+.fc-list-empty {
+    background: var(--bg-primary) !important;
+    text-align: center;
+    padding: var(--space-12) !important;
+}
+
+.fc-list-empty-cushion {
+    color: var(--text-muted) !important;
+    font-size: var(--text-base) !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.fc-list-empty-cushion::before {
+    content: '';
+    display: block;
+    width: 48px;
+    height: 48px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8' stroke-width='1.5'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5'/%3E%3C/svg%3E");
+    background-size: contain;
+    opacity: 0.5;
+}
+
+/* === Dark Mode Adjustments === */
+[data-theme="dark"] .fc-list-day th {
+    background: var(--bg-tertiary) !important;
+    border-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] .fc-list-day-cushion::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23818cf8' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z'/%3E%3C/svg%3E");
+}
+
+[data-theme="dark"] .fc-list-day-side-text {
+    background: rgba(99, 102, 241, 0.15);
+    color: #a5b4fc !important;
+}
+
+[data-theme="dark"] .fc-list-event-dot {
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3), 0 0 0 3px var(--bg-primary);
+}
+
+[data-theme="dark"] .fc-list-event:hover .fc-list-event-dot {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4), 0 0 0 4px var(--bg-tertiary);
+}
+
+[data-theme="dark"] .fc-list-event-title a::after {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14'/%3E%3C/svg%3E");
+}
+
+[data-theme="dark"] .fc-list-empty-cushion::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b' stroke-width='1.5'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5'/%3E%3C/svg%3E");
+}
+
+/* === Responsividade para List View === */
+@media (max-width: 767px) {
+    .fc-list-day th {
+        padding: var(--space-3) var(--space-4) !important;
+    }
+    
+    .fc-list-day-cushion::before {
+        width: 16px;
+        height: 16px;
+        margin-right: var(--space-2);
+    }
+    
+    .fc-list-day-text {
+        font-size: var(--text-sm) !important;
+    }
+    
+    .fc-list-day-side-text {
+        font-size: var(--text-xs) !important;
+        padding: 2px var(--space-2);
+    }
+    
+    .fc-list-event td {
+        padding: var(--space-3) var(--space-3) !important;
+    }
+    
+    .fc-list-event-time {
+        font-size: 10px !important;
+        min-width: 50px;
+    }
+    
+    .fc-list-event-title {
+        font-size: var(--text-xs) !important;
+    }
+    
+    .fc-list-event-title a::after {
+        display: none;
+    }
+}
+
 /* ===== Charts View ===== */
 .charts-container {
     display: grid;

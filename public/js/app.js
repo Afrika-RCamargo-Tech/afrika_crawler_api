@@ -97,7 +97,7 @@ const App = {
                 el.addEventListener('change', (e) => {
                     if (id === 'sortField') this.state.sortField = e.target.value;
                     if (id === 'sortOrder') this.state.sortOrder = e.target.value;
-                    if (id === 'perPage') this.state.perPage = parseInt(e.target.value);
+                    if (id === 'perPage') this.state.perPage = Number.parseInt(e.target.value);
                     this.state.currentPage = 1;
                     this.applyFilters();
                     this.savePreferences();
@@ -234,7 +234,7 @@ const App = {
             if (tool && u.tool !== tool) return false;
 
             // Date filter
-            if (days && !DateUtils.isWithinDays(u.date, parseInt(days))) {
+            if (days && !DateUtils.isWithinDays(u.date, Number.parseInt(days))) {
                 return false;
             }
 
@@ -295,7 +295,7 @@ const App = {
     },
 
     populateToolFilter() {
-        const tools = [...new Set(this.state.updates.map(u => u.tool))].sort();
+        const tools = [...new Set(this.state.updates.map(u => u.tool))].sort((a, b) => a.localeCompare(b));
         const select = document.getElementById('toolFilter');
         
         if (select) {
@@ -578,6 +578,7 @@ const App = {
         if (modal && body) {
             body.innerHTML = Components.updateDetailModal(update);
             modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
             lucide.createIcons();
         }
     },
@@ -586,6 +587,7 @@ const App = {
         const modal = document.getElementById('detailModal');
         if (modal) {
             modal.classList.remove('active');
+            document.body.style.overflow = '';
         }
     },
 
@@ -593,6 +595,7 @@ const App = {
         const modal = document.getElementById('exportModal');
         if (modal) {
             modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
             lucide.createIcons();
         }
     },
@@ -601,6 +604,7 @@ const App = {
         const modal = document.getElementById('exportModal');
         if (modal) {
             modal.classList.remove('active');
+            document.body.style.overflow = '';
         }
     },
 
@@ -734,4 +738,4 @@ const App = {
 document.addEventListener('DOMContentLoaded', () => App.init());
 
 // Make App globally available
-window.App = App;
+globalThis.App = App;

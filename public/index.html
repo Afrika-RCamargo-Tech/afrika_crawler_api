@@ -226,7 +226,7 @@
                     <table class="data-table">
                         <thead>
                             <tr>
-                                <th onclick="App.handleSort && App.handleSort('tool')">
+                                <th onclick="App.handleSort && App.handleSort('tool')" onkeydown="if(event.key==='Enter'||event.key===' ')App.handleSort&&App.handleSort('tool')" tabindex="0">
                                     Ferramenta
                                     <span class="sort-icon-container">
                                         <i data-lucide="arrow-up-down" class="sort-icon sort-icon-default"
@@ -237,7 +237,7 @@
                                             style="width: 14px; height: 14px;"></i>
                                     </span>
                                 </th>
-                                <th onclick="App.handleSort && App.handleSort('version')">
+                                <th onclick="App.handleSort && App.handleSort('version')" onkeydown="if(event.key==='Enter'||event.key===' ')App.handleSort&&App.handleSort('version')" tabindex="0">
                                     Versão
                                     <span class="sort-icon-container">
                                         <i data-lucide="arrow-up-down" class="sort-icon sort-icon-default"
@@ -248,7 +248,7 @@
                                             style="width: 14px; height: 14px;"></i>
                                     </span>
                                 </th>
-                                <th onclick="App.handleSort && App.handleSort('date')">
+                                <th onclick="App.handleSort && App.handleSort('date')" onkeydown="if(event.key==='Enter'||event.key===' ')App.handleSort&&App.handleSort('date')" tabindex="0">
                                     Data
                                     <span class="sort-icon-container">
                                         <i data-lucide="arrow-up-down" class="sort-icon sort-icon-default"
@@ -325,7 +325,7 @@
         <!-- Pagination -->
         <nav class="pagination-container" id="paginationContainer" aria-label="Paginação">
             <div class="pagination-info" id="paginationInfo"></div>
-            <div class="pagination" id="pagination" role="navigation"></div>
+            <nav class="pagination" id="pagination" aria-label="Páginas"></nav>
         </nav>
     </main>
 
@@ -352,7 +352,7 @@
     </div>
 
     <!-- ===== Detail Modal ===== -->
-    <div class="modal-overlay" id="detailModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <dialog class="modal-overlay" id="detailModal" aria-labelledby="modalTitle">
         <div class="modal">
             <div class="modal-header">
                 <h2 class="modal-title" id="modalTitle">
@@ -365,10 +365,10 @@
             </div>
             <div class="modal-body" id="modalBody"></div>
         </div>
-    </div>
+    </dialog>
 
     <!-- ===== Export Configuration Modal ===== -->
-    <div class="modal-overlay" id="exportModal" role="dialog" aria-modal="true" aria-labelledby="exportModalTitle">
+    <dialog class="modal-overlay" id="exportModal" aria-labelledby="exportModalTitle">
         <div class="modal">
             <div class="modal-header">
                 <h2 class="modal-title" id="exportModalTitle">
@@ -383,9 +383,9 @@
                 <div style="display: flex; flex-direction: column; gap: 20px;">
                     <!-- Format Selection -->
                     <div>
-                        <label style="display: block; font-weight: 600; margin-bottom: 12px; color: var(--text-primary);">
+                        <div style="display: block; font-weight: 600; margin-bottom: 12px; color: var(--text-primary);">
                             Formato de Exportação
-                        </label>
+                        </div>
                         <div style="display: flex; gap: 12px;">
                             <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; flex: 1;">
                                 <input type="radio" name="exportFormat" value="csv" checked style="cursor: pointer;">
@@ -400,9 +400,9 @@
 
                     <!-- Fields Selection -->
                     <div>
-                        <label style="display: block; font-weight: 600; margin-bottom: 12px; color: var(--text-primary);">
+                        <div style="display: block; font-weight: 600; margin-bottom: 12px; color: var(--text-primary);">
                             Campos a Incluir
-                        </label>
+                        </div>
                         <div style="display: flex; flex-direction: column; gap: 8px;">
                             <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
                                 <input type="checkbox" name="exportField" value="tool" checked style="cursor: pointer;">

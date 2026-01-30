@@ -125,17 +125,27 @@ const DOMUtils = {
      * Add ripple effect to button
      */
     addRipple(event) {
-        const button = event.currentTarget;
+        // Ensure we operate on the actual button element. The listener
+        // is attached to `document`, so `event.currentTarget` may be
+        // `document` which would cause a HierarchyRequestError when
+        // appending a child.
+        const button = (event.target && event.target.closest)
+            ? event.target.closest('.btn')
+            : event.currentTarget;
+
+        if (!button || button === document) return;
+
         const circle = document.createElement('span');
         const diameter = Math.max(button.clientWidth, button.clientHeight);
         const radius = diameter / 2;
+        const rect = button.getBoundingClientRect();
 
         circle.style.width = circle.style.height = `${diameter}px`;
-        circle.style.left = `${event.clientX - button.offsetLeft - radius}px`;
-        circle.style.top = `${event.clientY - button.offsetTop - radius}px`;
+        circle.style.left = `${event.clientX - rect.left - radius}px`;
+        circle.style.top = `${event.clientY - rect.top - radius}px`;
         circle.classList.add('ripple');
 
-        const ripple = button.getElementsByClassName('ripple')[0];
+        const ripple = button.querySelector('.ripple');
         if (ripple) ripple.remove();
 
         button.appendChild(circle);
@@ -287,7 +297,7 @@ const ExportUtils = {
             ...data.map(row => 
                 headers.map(header => {
                     const value = row[header] || '';
-                    return `"${String(value).replace(/"/g, '""')}"`;
+                    return `"${String(value).replaceAll('"', '""')}"`;
                 }).join(',')
             )
         ].join('\n');
@@ -334,7 +344,7 @@ const ExportUtils = {
             } catch {
                 return false;
             } finally {
-                document.body.removeChild(textarea);
+                textarea.remove();
             }
         }
     }
@@ -370,19 +380,19 @@ const ColorUtils = {
      * Get contrasting text color
      */
     getContrastColor(hexcolor) {
-        const r = parseInt(hexcolor.slice(1, 3), 16);
-        const g = parseInt(hexcolor.slice(3, 5), 16);
-        const b = parseInt(hexcolor.slice(5, 7), 16);
+        const r = Number.parseInt(hexcolor.slice(1, 3), 16);
+        const g = Number.parseInt(hexcolor.slice(3, 5), 16);
+        const b = Number.parseInt(hexcolor.slice(5, 7), 16);
         const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
         return yiq >= 128 ? '#000000' : '#ffffff';
     }
 };
 
 // Make utilities globally available
-window.DateUtils = DateUtils;
-window.StringUtils = StringUtils;
-window.DOMUtils = DOMUtils;
-window.StorageUtils = StorageUtils;
-window.AnimationUtils = AnimationUtils;
-window.ExportUtils = ExportUtils;
-window.ColorUtils = ColorUtils;
+globalThis.DateUtils = DateUtils;
+globalThis.StringUtils = StringUtils;
+globalThis.DOMUtils = DOMUtils;
+globalThis.StorageUtils = StorageUtils;
+globalThis.AnimationUtils = AnimationUtils;
+globalThis.ExportUtils = ExportUtils;
+globalThis.ColorUtils = ColorUtils;
