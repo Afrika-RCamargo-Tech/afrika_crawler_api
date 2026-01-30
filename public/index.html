@@ -1,41 +1,44 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Afrika Crawler - Monitor de atualizações de ferramentas de segurança">
     <meta name="theme-color" content="#6366f1">
-    
+
     <title>Afrika Crawler - Security Updates Monitor</title>
-    
+
     <!-- Preconnect to external resources -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
-    
+
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+
     <!-- External Libraries -->
     <!-- FullCalendar -->
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
-    
+
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-    
+
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
-    
+
     <!-- Tippy.js -->
     <script src="https://unpkg.com/@popperjs/core@2"></script>
     <script src="https://unpkg.com/tippy.js@6"></script>
     <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/animations/shift-away.css">
-    
+
     <!-- AOS - Animate on Scroll -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    
+
     <!-- Modular CSS -->
     <link rel="stylesheet" href="css/variables.css">
     <link rel="stylesheet" href="css/base.css">
@@ -44,6 +47,7 @@
     <link rel="stylesheet" href="css/views.css">
     <link rel="stylesheet" href="css/api-docs.css">
 </head>
+
 <body>
     <!-- ===== Header ===== -->
     <header class="header">
@@ -57,12 +61,12 @@
                     <span>Security Updates Monitor</span>
                 </div>
             </div>
-            
+
             <div class="header-actions" data-aos="fade-left">
                 <button class="btn btn-ghost" data-theme-toggle aria-label="Alternar tema">
                     <i data-lucide="moon" style="width: 18px; height: 18px;"></i>
                 </button>
-                <button class="btn" onclick="App.exportData('csv')">
+                <button class="btn" onclick="App.openExportModal()">
                     <i data-lucide="download" style="width: 16px; height: 16px;"></i>
                     <span>Exportar</span>
                 </button>
@@ -70,6 +74,11 @@
                     <i data-lucide="refresh-cw" style="width: 16px; height: 16px;"></i>
                     <span>Atualizar</span>
                 </button>
+                <div class="header-divider"></div>
+                <a href="api-docs.html" class="btn" title="Documentação da API">
+                    <span>API Docs</span>
+                    <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i>
+                </a>
             </div>
         </div>
     </header>
@@ -121,13 +130,8 @@
             <div class="toolbar-row">
                 <div class="search-box">
                     <i data-lucide="search" class="search-icon" style="width: 18px; height: 18px;"></i>
-                    <input 
-                        type="search" 
-                        id="searchInput" 
-                        class="input input-icon-left" 
-                        placeholder="Buscar por versão, ferramenta ou descrição..."
-                        aria-label="Buscar updates"
-                    >
+                    <input type="search" id="searchInput" class="input input-icon-left"
+                        placeholder="Buscar por versão, ferramenta ou descrição..." aria-label="Buscar updates">
                 </div>
                 <div class="filter-group">
                     <label for="toolFilter">Ferramenta:</label>
@@ -173,23 +177,28 @@
                 </div>
                 <div style="flex: 1;"></div>
                 <div class="view-toggle" role="tablist" aria-label="Tipo de visualização">
-                    <button class="view-btn active" data-view="cards" role="tab" aria-selected="true" title="Visualização em Cards">
+                    <button class="view-btn active" data-view="cards" role="tab" aria-selected="true"
+                        title="Visualização em Cards">
                         <i data-lucide="layout-grid" style="width: 16px; height: 16px;"></i>
                         <span>Cards</span>
                     </button>
-                    <button class="view-btn" data-view="table" role="tab" aria-selected="false" title="Visualização em Tabela">
+                    <button class="view-btn" data-view="table" role="tab" aria-selected="false"
+                        title="Visualização em Tabela">
                         <i data-lucide="table" style="width: 16px; height: 16px;"></i>
                         <span>Tabela</span>
                     </button>
-                    <button class="view-btn" data-view="timeline" role="tab" aria-selected="false" title="Visualização em Timeline">
+                    <button class="view-btn" data-view="timeline" role="tab" aria-selected="false"
+                        title="Visualização em Timeline">
                         <i data-lucide="git-commit" style="width: 16px; height: 16px;"></i>
                         <span>Timeline</span>
                     </button>
-                    <button class="view-btn" data-view="calendar" role="tab" aria-selected="false" title="Visualização em Calendário">
+                    <button class="view-btn" data-view="calendar" role="tab" aria-selected="false"
+                        title="Visualização em Calendário">
                         <i data-lucide="calendar-days" style="width: 16px; height: 16px;"></i>
                         <span>Calendário</span>
                     </button>
-                    <button class="view-btn" data-view="charts" role="tab" aria-selected="false" title="Visualização em Gráficos">
+                    <button class="view-btn" data-view="charts" role="tab" aria-selected="false"
+                        title="Visualização em Gráficos">
                         <i data-lucide="bar-chart-3" style="width: 16px; height: 16px;"></i>
                         <span>Analytics</span>
                     </button>
@@ -219,15 +228,36 @@
                             <tr>
                                 <th onclick="App.handleSort && App.handleSort('tool')">
                                     Ferramenta
-                                    <i data-lucide="arrow-up-down" class="sort-icon" style="width: 14px; height: 14px;"></i>
+                                    <span class="sort-icon-container">
+                                        <i data-lucide="arrow-up-down" class="sort-icon sort-icon-default"
+                                            style="width: 14px; height: 14px;"></i>
+                                        <i data-lucide="arrow-up" class="sort-icon sort-icon-asc"
+                                            style="width: 14px; height: 14px;"></i>
+                                        <i data-lucide="arrow-down" class="sort-icon sort-icon-desc"
+                                            style="width: 14px; height: 14px;"></i>
+                                    </span>
                                 </th>
                                 <th onclick="App.handleSort && App.handleSort('version')">
                                     Versão
-                                    <i data-lucide="arrow-up-down" class="sort-icon" style="width: 14px; height: 14px;"></i>
+                                    <span class="sort-icon-container">
+                                        <i data-lucide="arrow-up-down" class="sort-icon sort-icon-default"
+                                            style="width: 14px; height: 14px;"></i>
+                                        <i data-lucide="arrow-up" class="sort-icon sort-icon-asc"
+                                            style="width: 14px; height: 14px;"></i>
+                                        <i data-lucide="arrow-down" class="sort-icon sort-icon-desc"
+                                            style="width: 14px; height: 14px;"></i>
+                                    </span>
                                 </th>
                                 <th onclick="App.handleSort && App.handleSort('date')">
                                     Data
-                                    <i data-lucide="arrow-up-down" class="sort-icon" style="width: 14px; height: 14px;"></i>
+                                    <span class="sort-icon-container">
+                                        <i data-lucide="arrow-up-down" class="sort-icon sort-icon-default"
+                                            style="width: 14px; height: 14px;"></i>
+                                        <i data-lucide="arrow-up" class="sort-icon sort-icon-asc"
+                                            style="width: 14px; height: 14px;"></i>
+                                        <i data-lucide="arrow-down" class="sort-icon sort-icon-desc"
+                                            style="width: 14px; height: 14px;"></i>
+                                    </span>
                                 </th>
                                 <th>Descrição</th>
                                 <th>Ações</th>
@@ -256,7 +286,8 @@
                 <div class="chart-card" data-aos="fade-up">
                     <div class="chart-header">
                         <h3 class="chart-title">
-                            <i data-lucide="trending-up" style="width: 20px; height: 20px; color: var(--color-primary);"></i>
+                            <i data-lucide="trending-up"
+                                style="width: 20px; height: 20px; color: var(--color-primary);"></i>
                             Updates ao Longo do Tempo
                         </h3>
                     </div>
@@ -267,7 +298,8 @@
                 <div class="chart-card" data-aos="fade-up" data-aos-delay="100">
                     <div class="chart-header">
                         <h3 class="chart-title">
-                            <i data-lucide="pie-chart" style="width: 20px; height: 20px; color: var(--color-primary);"></i>
+                            <i data-lucide="pie-chart"
+                                style="width: 20px; height: 20px; color: var(--color-primary);"></i>
                             Distribuição por Ferramenta
                         </h3>
                     </div>
@@ -278,7 +310,8 @@
                 <div class="chart-card" data-aos="fade-up" data-aos-delay="200">
                     <div class="chart-header">
                         <h3 class="chart-title">
-                            <i data-lucide="activity" style="width: 20px; height: 20px; color: var(--color-primary);"></i>
+                            <i data-lucide="activity"
+                                style="width: 20px; height: 20px; color: var(--color-primary);"></i>
                             Atividade por Dia da Semana
                         </h3>
                     </div>
@@ -294,124 +327,6 @@
             <div class="pagination-info" id="paginationInfo"></div>
             <div class="pagination" id="pagination" role="navigation"></div>
         </nav>
-
-        <!-- API Documentation -->
-        <section class="api-docs" id="apiDocs" data-aos="fade-up">
-            <div class="api-docs-header">
-                <div class="api-docs-icon">
-                    <i data-lucide="code-2" style="width: 24px; height: 24px;"></i>
-                </div>
-                <div class="api-docs-title">
-                    <h2>API Documentation</h2>
-                    <p>Integre os dados de updates em suas aplicações</p>
-                </div>
-                <span class="api-badge">
-                    <i data-lucide="zap" style="width: 12px; height: 12px;"></i>
-                    REST API
-                </span>
-            </div>
-
-            <div class="api-base-url">
-                <div class="api-base-url-icon">
-                    <i data-lucide="globe" style="width: 20px; height: 20px;"></i>
-                </div>
-                <div class="api-base-url-content">
-                    <div class="api-base-url-label">Base URL</div>
-                    <code id="apiBaseUrl">https://afrikacrawlerapi.vercel.app/api</code>
-                </div>
-                <button class="api-copy-btn" onclick="App.copyApiUrl()">
-                    <i data-lucide="copy" style="width: 14px; height: 14px;"></i>
-                    Copiar
-                </button>
-            </div>
-
-            <div class="api-endpoints">
-                <!-- GET /updates -->
-                <article class="api-endpoint" id="endpoint-updates">
-                    <div class="api-endpoint-header" onclick="App.toggleEndpoint('endpoint-updates')">
-                        <span class="api-method get">GET</span>
-                        <span class="api-path">/updates</span>
-                        <span class="api-desc">Lista todos os updates das ferramentas</span>
-                        <span class="api-endpoint-toggle">
-                            <i data-lucide="chevron-down" style="width: 18px; height: 18px;"></i>
-                        </span>
-                    </div>
-                    <div class="api-endpoint-body">
-                        <div class="api-section">
-                            <div class="api-section-title">Query Parameters</div>
-                            <div class="api-params">
-                                <div class="api-param">
-                                    <span class="api-param-name">tool</span>
-                                    <span class="api-param-type">string</span>
-                                    <span class="api-param-desc">Filtrar por ferramenta (ex: Veracode)</span>
-                                </div>
-                                <div class="api-param">
-                                    <span class="api-param-name">limit</span>
-                                    <span class="api-param-type">number</span>
-                                    <span class="api-param-desc">Limite de resultados (padrão: 20)</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="api-section">
-                            <div class="api-section-title">Exemplo de Resposta</div>
-                            <div class="api-code-block">
-                                <div class="api-code-header">
-                                    <span class="api-code-lang">JSON</span>
-                                </div>
-                                <div class="api-code-content">
-<code>[{
-  <span class="key">"tool"</span>: <span class="string">"Veracode"</span>,
-  <span class="key">"version"</span>: <span class="string">"CLI v3.5.0"</span>,
-  <span class="key">"date"</span>: <span class="string">"2026-01-28T12:00:00.000Z"</span>,
-  <span class="key">"description"</span>: <span class="string">"New features..."</span>,
-  <span class="key">"link"</span>: <span class="string">"https://docs.veracode.com/..."</span>
-}]</code>
-                                </div>
-                            </div>
-                        </div>
-
-                        <button class="api-try-btn" onclick="App.tryApiEndpoint('/updates?limit=5')">
-                            <i data-lucide="play" style="width: 14px; height: 14px;"></i>
-                            Testar no navegador
-                        </button>
-                    </div>
-                </article>
-
-                <!-- GET / -->
-                <article class="api-endpoint" id="endpoint-health">
-                    <div class="api-endpoint-header" onclick="App.toggleEndpoint('endpoint-health')">
-                        <span class="api-method get">GET</span>
-                        <span class="api-path">/</span>
-                        <span class="api-desc">Health check da API</span>
-                        <span class="api-endpoint-toggle">
-                            <i data-lucide="chevron-down" style="width: 18px; height: 18px;"></i>
-                        </span>
-                    </div>
-                    <div class="api-endpoint-body">
-                        <div class="api-section">
-                            <div class="api-section-title">Exemplo de Resposta</div>
-                            <div class="api-code-block">
-                                <div class="api-code-header">
-                                    <span class="api-code-lang">JSON</span>
-                                </div>
-                                <div class="api-code-content">
-<code>{
-  <span class="key">"status"</span>: <span class="string">"ok"</span>,
-  <span class="key">"message"</span>: <span class="string">"Afrika Crawler API is running 🚀"</span>
-}</code>
-                                </div>
-                            </div>
-                        </div>
-
-                        <button class="api-try-btn" onclick="App.tryApiEndpoint('/')">
-                            <i data-lucide="play" style="width: 14px; height: 14px;"></i>
-                            Testar no navegador
-                        </button>
-                    </div>
-                </article>
-            </div>
-        </section>
     </main>
 
     <!-- ===== Footer ===== -->
@@ -452,6 +367,81 @@
         </div>
     </div>
 
+    <!-- ===== Export Configuration Modal ===== -->
+    <div class="modal-overlay" id="exportModal" role="dialog" aria-modal="true" aria-labelledby="exportModalTitle">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title" id="exportModalTitle">
+                    <i data-lucide="settings" style="width: 20px; height: 20px; color: var(--color-primary);"></i>
+                    Configurar Exportação
+                </h2>
+                <button class="modal-close" onclick="App.closeExportModal()" aria-label="Fechar modal">
+                    <i data-lucide="x" style="width: 20px; height: 20px;"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div style="display: flex; flex-direction: column; gap: 20px;">
+                    <!-- Format Selection -->
+                    <div>
+                        <label style="display: block; font-weight: 600; margin-bottom: 12px; color: var(--text-primary);">
+                            Formato de Exportação
+                        </label>
+                        <div style="display: flex; gap: 12px;">
+                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; flex: 1;">
+                                <input type="radio" name="exportFormat" value="csv" checked style="cursor: pointer;">
+                                <span>CSV</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; flex: 1;">
+                                <input type="radio" name="exportFormat" value="json" style="cursor: pointer;">
+                                <span>JSON</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Fields Selection -->
+                    <div>
+                        <label style="display: block; font-weight: 600; margin-bottom: 12px; color: var(--text-primary);">
+                            Campos a Incluir
+                        </label>
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                <input type="checkbox" name="exportField" value="tool" checked style="cursor: pointer;">
+                                <span>Ferramenta</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                <input type="checkbox" name="exportField" value="version" checked style="cursor: pointer;">
+                                <span>Versão</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                <input type="checkbox" name="exportField" value="date" checked style="cursor: pointer;">
+                                <span>Data</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                <input type="checkbox" name="exportField" value="description" style="cursor: pointer;">
+                                <span>Descrição</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                <input type="checkbox" name="exportField" value="link" style="cursor: pointer;">
+                                <span>Link</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div style="display: flex; gap: 12px; margin-top: 8px;">
+                        <button class="btn btn-ghost" onclick="App.closeExportModal()" style="flex: 1;">
+                            Cancelar
+                        </button>
+                        <button class="btn btn-primary" onclick="App.performExport()" style="flex: 1;">
+                            <i data-lucide="download" style="width: 16px; height: 16px;"></i>
+                            <span>Exportar</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- ===== Toast Container ===== -->
     <div class="toast-container" aria-live="polite"></div>
 
@@ -462,7 +452,7 @@
     <script src="js/components.js"></script>
     <script src="js/charts.js"></script>
     <script src="js/app.js"></script>
-    
+
     <!-- Initialize AOS -->
     <script>
         AOS.init({
@@ -473,4 +463,5 @@
         });
     </script>
 </body>
+
 </html>

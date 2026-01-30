@@ -86,13 +86,24 @@
     font-size: var(--text-sm);
     line-height: var(--line-height-relaxed);
     flex-grow: 1;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-height: 40px;
+}
+
+.update-card-description-empty {
+    color: var(--text-muted);
+    font-style: italic;
+    opacity: 0.7;
+    margin-bottom: var(--space-4);
 }
 
 .update-card-footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: var(--space-4);
+    margin-top: auto;
     padding-top: var(--space-4);
     border-top: 1px solid var(--border-color);
 }
@@ -149,15 +160,84 @@
     background: var(--bg-secondary);
 }
 
-.data-table th .sort-icon {
+.sort-icon-container {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     margin-left: var(--space-1);
-    opacity: 0.4;
-    transition: opacity var(--transition-fast);
+    width: 16px;
+    height: 16px;
 }
 
-.data-table th.sorted .sort-icon {
+.sort-icon {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    opacity: 0.4;
+    transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    color: currentColor;
+}
+
+/* Ícone padrão (sempre visível quando não está ordenado) */
+.sort-icon-default {
+    opacity: 0.25;
+    transform: scale(1) translateY(0);
+}
+
+/* Ícones de ordem (asc/desc) */
+.sort-icon-asc,
+.sort-icon-desc {
+    opacity: 0;
+    transform: scale(0) translateY(0);
+}
+
+.data-table th:hover .sort-icon-default {
+    opacity: 0.5;
+}
+
+.data-table th:hover .sort-icon-asc,
+.data-table th:hover .sort-icon-desc {
+    opacity: 0.5;
+}
+
+/* Quando a coluna está selecionada para ordenação */
+.data-table th.sorted .sort-icon-default {
+    opacity: 0;
+    transform: scale(0) translateY(-8px);
+}
+
+.data-table th.sorted .sort-icon-asc,
+.data-table th.sorted .sort-icon-desc {
     opacity: 1;
     color: var(--color-primary);
+    transform: scale(1) translateY(0);
+}
+
+/* Descendente (não asc) */
+.data-table th.sorted:not(.asc) .sort-icon-asc {
+    opacity: 0;
+    transform: scale(0) translateY(-12px);
+    pointer-events: none;
+}
+
+.data-table th.sorted:not(.asc) .sort-icon-desc {
+    opacity: 1;
+    color: var(--color-primary);
+    transform: scale(1) translateY(0);
+}
+
+/* Ascendente */
+.data-table th.sorted.asc .sort-icon-asc {
+    opacity: 1;
+    color: var(--color-primary);
+    transform: scale(1) translateY(0);
+}
+
+.data-table th.sorted.asc .sort-icon-desc {
+    opacity: 0;
+    transform: scale(0) translateY(12px);
+    pointer-events: none;
 }
 
 .data-table td {
@@ -474,27 +554,244 @@
     height: 300px;
 }
 
-/* ===== Responsive Views ===== */
-@media (max-width: 768px) {
+/* ===== Responsive Views - Mobile First ===== */
+
+/* Mobile: < 480px */
+@media (max-width: 479px) {
+    /* Update Cards */
+    .updates-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-3);
+    }
+    
+    .update-card {
+        padding: var(--space-4);
+    }
+    
+    .update-card-header {
+        flex-direction: column;
+        gap: var(--space-2);
+    }
+    
+    .update-card-badge {
+        font-size: var(--text-xs);
+        padding: var(--space-1) var(--space-2);
+    }
+    
+    .update-card-version {
+        font-size: var(--text-base);
+        word-break: break-word;
+    }
+    
+    .update-card-description {
+        font-size: var(--text-xs);
+    }
+    
+    .update-card-footer {
+        flex-direction: column;
+        gap: var(--space-3);
+        align-items: flex-start;
+    }
+    
+    .update-card-link {
+        font-size: var(--text-xs);
+        width: 100%;
+        justify-content: center;
+        padding: var(--space-2);
+        border-radius: var(--border-radius-md);
+        background: var(--bg-tertiary);
+    }
+    
+    .update-card-actions {
+        width: 100%;
+    }
+    
+    /* Table View */
+    .table-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .data-table {
+        font-size: var(--text-xs);
+    }
+    
+    .data-table th,
+    .data-table td {
+        padding: var(--space-2) var(--space-3);
+        white-space: nowrap;
+    }
+    
+    .table-version {
+        font-size: var(--text-sm);
+    }
+    
+    .table-description {
+        display: none;
+    }
+    
+    .table-actions {
+        gap: var(--space-1);
+        flex-direction: column;
+        min-width: max-content;
+    }
+    
+    .table-actions button {
+        min-width: 44px;
+        height: 44px;
+    }
+    
+    /* Timeline View */
+    .timeline {
+        padding-left: 20px;
+    }
+    
+    .timeline::before {
+        left: 4px;
+    }
+    
+    .timeline-dot {
+        left: -20px;
+        width: 12px;
+        height: 12px;
+    }
+    
+    .timeline-item {
+        gap: var(--space-3);
+    }
+    
+    .timeline-content {
+        padding: var(--space-3);
+    }
+    
+    .timeline-version {
+        font-size: var(--text-base);
+    }
+    
+    .timeline-tool {
+        font-size: var(--text-xs);
+    }
+    
+    /* Charts */
+    .charts-container {
+        grid-template-columns: 1fr;
+        gap: var(--space-3);
+    }
+    
+    .chart-wrapper {
+        height: 250px;
+    }
+    
+    .chart-title {
+        font-size: var(--text-sm);
+    }
+}
+
+/* Small: 480px - 767px */
+@media (min-width: 480px) and (max-width: 767px) {
+    /* Update Cards */
+    .updates-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-3);
+    }
+    
+    .update-card {
+        padding: var(--space-4);
+    }
+    
+    .update-card-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .update-card-footer {
+        flex-wrap: wrap;
+    }
+    
+    /* Table View */
+    .table-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .data-table {
+        font-size: var(--text-sm);
+    }
+    
+    .table-description {
+        max-width: 200px;
+        white-space: normal;
+    }
+    
+    .table-actions {
+        gap: var(--space-2);
+        flex-wrap: wrap;
+    }
+    
+    /* Timeline View */
     .timeline {
         padding-left: 30px;
     }
     
     .timeline::before {
-        left: 10px;
+        left: 8px;
     }
     
     .timeline-dot {
-        left: -28px;
-        width: 14px;
-        height: 14px;
+        left: -24px;
+        width: 12px;
+        height: 12px;
     }
     
+    /* Charts */
     .charts-container {
         grid-template-columns: 1fr;
+        gap: var(--space-4);
     }
     
     .chart-wrapper {
-        height: 250px;
+        height: 280px;
+    }
+}
+
+/* Medium: 768px - 1023px */
+@media (min-width: 768px) and (max-width: 1023px) {
+    /* Update Cards */
+    .updates-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-4);
+    }
+    
+    .update-card {
+        padding: var(--space-4);
+    }
+    
+    /* Table View */
+    .table-wrapper {
+        overflow-x: auto;
+    }
+    
+    .table-description {
+        max-width: 250px;
+    }
+    
+    /* Charts */
+    .charts-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-4);
+    }
+}
+
+/* Large: 1024px+ */
+@media (min-width: 1024px) {
+    /* Update Cards */
+    .updates-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--space-4);
+    }
+    
+    /* Charts */
+    .charts-container {
+        grid-template-columns: repeat(2, 1fr);
     }
 }

@@ -387,7 +387,7 @@
 /* ===== Toast Notifications ===== */
 .toast-container {
     position: fixed;
-    top: var(--space-4);
+    top: calc(70px + var(--space-4)); /* Below header (approx 70px) */
     right: var(--space-4);
     z-index: var(--z-tooltip);
     display: flex;
@@ -589,4 +589,254 @@
     flex: 1;
     font-size: var(--text-sm);
     font-weight: var(--font-medium);
+}
+
+/* ===== Responsive Components - Mobile First ===== */
+
+/* Mobile: < 480px */
+@media (max-width: 479px) {
+    /* Buttons */
+    .btn {
+        min-height: 44px;
+        padding: var(--space-2) var(--space-3);
+        font-size: var(--text-sm);
+        gap: var(--space-1);
+        white-space: normal;
+    }
+    
+    .btn-icon {
+        width: 44px;
+        height: 44px;
+    }
+    
+    .btn-sm {
+        min-height: 40px;
+        padding: var(--space-2) var(--space-3);
+    }
+    
+    .btn-lg {
+        min-height: 48px;
+        padding: var(--space-3) var(--space-4);
+    }
+    
+    /* Inputs & Selects */
+    .input {
+        min-height: 44px;
+        padding: var(--space-2) var(--space-3);
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+    
+    .select {
+        min-height: 44px;
+        padding: var(--space-2) 2.5rem var(--space-2) var(--space-3);
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+    
+    /* Modals */
+    .modal {
+        max-width: 100%;
+        max-height: 100vh;
+        border-radius: 0;
+        width: 100%;
+        margin: 0;
+    }
+    
+    .modal-header {
+        padding: var(--space-4) var(--space-4);
+    }
+    
+    .modal-body {
+        padding: var(--space-4);
+    }
+    
+    .modal-footer {
+        padding: var(--space-3) var(--space-4);
+        flex-direction: column-reverse;
+        gap: var(--space-2);
+    }
+    
+    .modal-footer .btn {
+        width: 100%;
+    }
+    
+    .modal-title {
+        font-size: var(--text-lg);
+        flex: 1;
+        word-break: break-word;
+    }
+    
+    .modal-close {
+        width: 32px;
+        height: 32px;
+    }
+    
+    /* Toast */
+    .toast-container {
+        top: calc(60px + var(--space-3)); /* Below mobile header */
+        left: var(--space-4);
+        right: var(--space-4);
+    }
+    
+    .toast {
+        min-width: unset;
+        width: 100%;
+        flex-direction: column;
+        text-align: center;
+        padding: var(--space-3) var(--space-4);
+    }
+    
+    .toast-title {
+        font-size: var(--text-xs);
+    }
+    
+    .toast-message {
+        font-size: var(--text-xs);
+    }
+    
+    /* Loading */
+    .spinner {
+        width: 40px;
+        height: 40px;
+        border-width: 2px;
+    }
+    
+    .spinner-dots span {
+        width: 10px;
+        height: 10px;
+    }
+    
+    /* Empty State */
+    .empty-state {
+        padding: var(--space-8) var(--space-4);
+        border-radius: var(--border-radius-lg);
+    }
+    
+    .empty-state-icon {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .empty-state h3 {
+        font-size: var(--text-base);
+    }
+    
+    .empty-state p {
+        font-size: var(--text-sm);
+    }
+    
+    /* Pagination */
+    .pagination {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .page-btn {
+        min-width: 36px;
+        height: 36px;
+        font-size: var(--text-xs);
+        padding: 0 var(--space-2);
+    }
+    
+    /* Cards */
+    .card-body {
+        padding: var(--space-4);
+    }
+    
+    .card-header {
+        padding: var(--space-3) var(--space-4);
+    }
+    
+    .card-footer {
+        padding: var(--space-3) var(--space-4);
+    }
+    
+    /* Error Banner */
+    .error-banner {
+        flex-direction: column;
+        text-align: center;
+        gap: var(--space-2);
+        padding: var(--space-3);
+    }
+    
+    .error-banner span {
+        font-size: var(--text-xs);
+    }
+}
+
+/* Small: 480px - 767px */
+@media (min-width: 480px) and (max-width: 767px) {
+    /* Buttons */
+    .btn {
+        min-height: 40px;
+        padding: var(--space-2) var(--space-3);
+    }
+    
+    .btn-icon {
+        width: 40px;
+        height: 40px;
+    }
+    
+    /* Inputs & Selects */
+    .input {
+        min-height: 40px;
+        font-size: 16px;
+    }
+    
+    .select {
+        min-height: 40px;
+        font-size: 16px;
+    }
+    
+    /* Modals */
+    .modal {
+        max-width: 90%;
+        border-radius: var(--border-radius-lg);
+    }
+    
+    .modal-header {
+        padding: var(--space-4) var(--space-5);
+    }
+    
+    .modal-body {
+        padding: var(--space-5);
+    }
+    
+    .modal-footer {
+        padding: var(--space-4) var(--space-5);
+        gap: var(--space-2);
+    }
+    
+    /* Toast */
+    .toast-container {
+        left: var(--space-3);
+        right: var(--space-3);
+    }
+    
+    .toast {
+        min-width: unset;
+    }
+    
+    /* Pagination */
+    .pagination {
+        flex-wrap: wrap;
+    }
+}
+
+/* Medium: 768px - 1023px */
+@media (min-width: 768px) and (max-width: 1023px) {
+    /* Modals */
+    .modal {
+        max-width: 600px;
+    }
+    
+    /* Toast */
+    .toast-container {
+        bottom: var(--space-4);
+        right: var(--space-4);
+    }
+}
+
+/* Large: 1024px+ */
+@media (min-width: 1024px) {
+    /* All default styles apply */
 }

@@ -109,6 +109,53 @@
     --header-height: 72px;
 }
 
+/* Mobile-First Responsive Breakpoints */
+
+/* Mobile: < 480px */
+@media (max-width: 479px) {
+    :root {
+        --container-padding: 1rem;
+        --text-xs: 0.65rem;
+        --text-sm: 0.75rem;
+        --text-base: 0.8125rem;
+        --text-lg: 0.875rem;
+        --text-xl: 1rem;
+        --text-2xl: 1.125rem;
+        --text-3xl: 1.25rem;
+        --space-4: 0.75rem;
+        --space-5: 1rem;
+        --space-6: 1.25rem;
+        --space-8: 1.5rem;
+        --space-12: 2rem;
+    }
+}
+
+/* Small: 480px - 767px */
+@media (min-width: 480px) and (max-width: 767px) {
+    :root {
+        --container-padding: 1.25rem;
+        --text-xs: 0.7rem;
+        --text-sm: 0.8125rem;
+        --text-base: 0.875rem;
+        --text-lg: 1rem;
+        --text-xl: 1.125rem;
+    }
+}
+
+/* Medium: 768px - 1023px */
+@media (min-width: 768px) and (max-width: 1023px) {
+    :root {
+        --container-padding: 1.5rem;
+    }
+}
+
+/* Large: 1024px+ */
+@media (min-width: 1024px) {
+    :root {
+        --container-padding: 2rem;
+    }
+}
+
 /* Dark Theme */
 [data-theme="dark"] {
     --color-primary: #818cf8;

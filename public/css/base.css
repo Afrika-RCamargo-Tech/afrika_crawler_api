@@ -141,3 +141,47 @@ input, select, textarea {
     -webkit-text-fill-color: transparent;
     background-clip: text;
 }
+
+/* ===== Mobile-Specific Improvements ===== */
+
+/* Touch-friendly tap areas - minimum 44x44px for mobile accessibility */
+@media (max-width: 767px) {
+    /* Improve touch targets */
+    button, a, [role="button"] {
+        min-height: 44px;
+        min-width: 44px;
+        padding: var(--space-2) var(--space-3) !important;
+    }
+    
+    /* Prevent zoom on input focus on iOS */
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="search"],
+    select,
+    textarea {
+        font-size: 16px !important;
+    }
+    
+    /* Better scroll performance */
+    body {
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        user-select: none;
+    }
+    
+    a, button, input, [role="button"] {
+        -webkit-user-select: text;
+        user-select: text;
+    }
+    
+    /* Smooth scrolling for mobile */
+    .table-wrapper {
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    /* Improve modal usability on mobile */
+    .modal-overlay {
+        padding: var(--space-4);
+    }
+}

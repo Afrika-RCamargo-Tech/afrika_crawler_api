@@ -71,14 +71,6 @@ class ThemeManager {
         this.theme = this.theme === 'light' ? 'dark' : 'light';
         StorageUtils.set(this.storageKey, this.theme);
         this.apply();
-        
-        // Show toast
-        if (window.Toast) {
-            Toast.info(
-                `Tema ${this.theme === 'dark' ? 'escuro' : 'claro'} ativado`,
-                'Tema alterado'
-            );
-        }
     }
 
     get isDark() {

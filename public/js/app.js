@@ -53,6 +53,21 @@ const App = {
         this.state.currentView = prefs.view || 'cards';
         this.state.sortField = prefs.sortField || 'date';
         this.state.sortOrder = prefs.sortOrder || 'desc';
+        
+        // Sync view toggle buttons with saved preference
+        this.syncViewToggle();
+    },
+    
+    syncViewToggle() {
+        const savedView = this.state.currentView;
+        document.querySelectorAll('.view-btn').forEach(btn => {
+            btn.classList.remove('active');
+            btn.setAttribute('aria-selected', 'false');
+            if (btn.dataset.view === savedView) {
+                btn.classList.add('active');
+                btn.setAttribute('aria-selected', 'true');
+            }
+        });
     },
 
     savePreferences() {
@@ -104,6 +119,13 @@ const App = {
         if (modal) {
             modal.addEventListener('click', (e) => {
                 if (e.target === modal) this.closeModal();
+            });
+        }
+
+        const exportModal = document.getElementById('exportModal');
+        if (exportModal) {
+            exportModal.addEventListener('click', (e) => {
+                if (e.target === exportModal) this.closeExportModal();
             });
         }
 
@@ -174,6 +196,28 @@ const App = {
     },
 
     // ===== Filtering & Sorting =====
+    handleSort(field) {
+        // If clicking the same field, toggle the order
+        if (this.state.sortField === field) {
+            this.state.sortOrder = this.state.sortOrder === 'desc' ? 'asc' : 'desc';
+        } else {
+            // If clicking a different field, set it as the sort field with default desc order
+            this.state.sortField = field;
+            this.state.sortOrder = 'desc';
+        }
+
+        // Update dropdowns to reflect the new sort state
+        const sortFieldSelect = document.getElementById('sortField');
+        const sortOrderSelect = document.getElementById('sortOrder');
+        if (sortFieldSelect) sortFieldSelect.value = this.state.sortField;
+        if (sortOrderSelect) sortOrderSelect.value = this.state.sortOrder;
+
+        // Reset page and apply filters
+        this.state.currentPage = 1;
+        this.applyFilters();
+        this.savePreferences();
+    },
+
     applyFilters() {
         const search = document.getElementById('searchInput')?.value.toLowerCase() || '';
         const tool = document.getElementById('toolFilter')?.value || '';
@@ -277,7 +321,7 @@ const App = {
         // Toggle pagination visibility
         const paginationContainer = document.getElementById('paginationContainer');
         if (paginationContainer) {
-            paginationContainer.style.display = currentView === 'calendar' ? 'none' : 'flex';
+            paginationContainer.style.display = (currentView === 'calendar' || currentView === 'charts') ? 'none' : 'flex';
         }
 
         // Render based on view type
@@ -342,7 +386,25 @@ const App = {
             tbody.innerHTML = updates.map(u => Components.tableRow(u)).join('');
         }
 
+        // Update table headers with sort indicators
+        this.updateTableHeaders();
+
         lucide.createIcons();
+    },
+
+    updateTableHeaders() {
+        const headers = document.querySelectorAll('.data-table th');
+        headers.forEach(th => {
+            th.classList.remove('sorted', 'asc', 'desc');
+            
+            const field = th.getAttribute('onclick')?.match(/'(\w+)'/)?.[1];
+            if (field && field === this.state.sortField) {
+                th.classList.add('sorted');
+                if (this.state.sortOrder === 'asc') {
+                    th.classList.add('asc');
+                }
+            }
+        });
     },
 
     renderTimeline(updates) {
@@ -527,6 +589,39 @@ const App = {
         }
     },
 
+    openExportModal() {
+        const modal = document.getElementById('exportModal');
+        if (modal) {
+            modal.classList.add('active');
+            lucide.createIcons();
+        }
+    },
+
+    closeExportModal() {
+        const modal = document.getElementById('exportModal');
+        if (modal) {
+            modal.classList.remove('active');
+        }
+    },
+
+    performExport() {
+        // Get selected format
+        const formatRadios = document.querySelectorAll('input[name="exportFormat"]');
+        const format = Array.from(formatRadios).find(r => r.checked)?.value || 'csv';
+
+        // Get selected fields
+        const fieldCheckboxes = document.querySelectorAll('input[name="exportField"]:checked');
+        const fields = Array.from(fieldCheckboxes).map(c => c.value);
+
+        if (fields.length === 0) {
+            Toast.error('Selecione pelo menos um campo para exportar', 'Erro');
+            return;
+        }
+
+        this.exportData(format, fields);
+        this.closeExportModal();
+    },
+
     // ===== Loading & Error States =====
     showLoading(show) {
         this.state.isLoading = show;
@@ -560,14 +655,34 @@ const App = {
         await this.loadUpdates();
     },
 
-    exportData(format = 'csv') {
-        const data = this.state.filteredUpdates.map(u => ({
-            ferramenta: u.tool,
-            versao: u.version,
-            data: u.date,
-            descricao: u.description || '',
-            link: u.link || ''
-        }));
+    exportData(format = 'csv', fields = ['tool', 'version', 'date', 'description', 'link']) {
+        // Map field names to update properties
+        const fieldMap = {
+            tool: 'ferramenta',
+            version: 'versao',
+            date: 'data',
+            description: 'descricao',
+            link: 'link'
+        };
+
+        const data = this.state.filteredUpdates.map(u => {
+            const row = {};
+            fields.forEach(field => {
+                const key = fieldMap[field];
+                if (field === 'tool') {
+                    row[key] = u.tool;
+                } else if (field === 'version') {
+                    row[key] = u.version;
+                } else if (field === 'date') {
+                    row[key] = u.date;
+                } else if (field === 'description') {
+                    row[key] = u.description || '';
+                } else if (field === 'link') {
+                    row[key] = u.link || '';
+                }
+            });
+            return row;
+        });
 
         const filename = `afrika-updates-${new Date().toISOString().split('T')[0]}`;
 

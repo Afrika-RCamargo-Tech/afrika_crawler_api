@@ -403,3 +403,192 @@
         gap: var(--space-2);
     }
 }
+
+/* Mobile-First Responsive API Docs */
+
+/* Mobile: < 480px */
+@media (max-width: 479px) {
+    .api-docs {
+        padding: var(--space-4);
+        margin-top: var(--space-6);
+    }
+    
+    .api-docs-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-2);
+        padding-bottom: var(--space-3);
+    }
+    
+    .api-docs-icon {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .api-docs-title {
+        font-size: var(--text-lg);
+    }
+    
+    .api-section {
+        margin-bottom: var(--space-4);
+    }
+    
+    .api-section-title {
+        font-size: var(--text-base);
+    }
+    
+    .api-endpoint {
+        flex-direction: column;
+        gap: var(--space-3);
+        margin-bottom: var(--space-4);
+    }
+    
+    .api-endpoint-header {
+        flex-direction: column;
+        gap: var(--space-2);
+    }
+    
+    .api-method {
+        width: 100%;
+    }
+    
+    .api-route {
+        width: 100%;
+        word-break: break-all;
+        font-size: var(--text-xs);
+    }
+    
+    .api-param {
+        flex-direction: column;
+        gap: var(--space-2);
+        padding: var(--space-3);
+    }
+    
+    .api-param-name {
+        font-size: var(--text-xs);
+    }
+    
+    .api-response {
+        padding: var(--space-3);
+        font-size: var(--text-xs);
+    }
+}
+
+/* Small: 480px - 767px */
+@media (min-width: 480px) and (max-width: 767px) {
+    .api-docs {
+        padding: var(--space-5);
+        margin-top: var(--space-6);
+    }
+    
+    .api-endpoint {
+        flex-direction: column;
+        gap: var(--space-3);
+    }
+    
+    .api-endpoint-header {
+        flex-direction: column;
+        gap: var(--space-2);
+    }
+    
+    .api-route {
+        word-break: break-all;
+        font-size: var(--text-xs);
+    }
+}
+/* API Info Cards */
+.api-info-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+.api-info-card {
+    padding: 16px;
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    border-left: 4px solid var(--color-primary);
+}
+
+.api-info-card-label {
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.api-info-card-value {
+    color: var(--text-primary);
+    font-size: 0.9375rem;
+}
+
+/* Best Practices Section */
+.api-best-practices {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    padding: 24px;
+    margin-top: var(--space-4);
+}
+
+.api-best-practices h3 {
+    margin-top: 0;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--color-primary);
+    font-size: 1.125rem;
+}
+
+.api-best-practices ul {
+    margin: 0;
+    padding-left: 20px;
+    color: var(--text-secondary);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+}
+
+.api-best-practices li {
+    margin-bottom: 8px;
+}
+
+.api-best-practices strong {
+    color: var(--text-primary);
+}
+
+/* Optional Parameter Badge */
+.api-param-optional {
+    font-size: 0.625rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    background: var(--bg-tertiary);
+    color: var(--text-muted);
+    border-radius: var(--border-radius-sm);
+    letter-spacing: 0.05em;
+}
+
+/* Tippy Tooltip Custom Theme */
+.tippy-box[data-theme~='custom'] {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-lg);
+    font-size: 0.8125rem;
+}
+
+.tippy-box[data-theme~='custom'] .tippy-arrow {
+    color: var(--bg-secondary);
+}
+
+.tippy-box[data-theme~='custom'][data-placement^='top'] > .tippy-arrow::before {
+    border-top-color: var(--border-color);
+}
+
+.tippy-box[data-theme~='custom'][data-placement^='bottom'] > .tippy-arrow::before {
+    border-bottom-color: var(--border-color);
+}

@@ -30,7 +30,12 @@ const Components = {
                     <p class="update-card-description">
                         ${StringUtils.escapeHtml(StringUtils.truncate(update.description, 150))}
                     </p>
-                ` : ''}
+                ` : `
+                    <p class="update-card-description update-card-description-empty">
+                        <i data-lucide="file-text" style="width: 14px; height: 14px;"></i>
+                        Sem descrição disponível
+                    </p>
+                `}
                 <footer class="update-card-footer">
                     ${detailsLink ? `
                         <a href="${detailsLink}" target="_blank" rel="noopener noreferrer" class="update-card-link">
